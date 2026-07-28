@@ -1,0 +1,23 @@
+{
+  "name": "Sångbok Gitarr",
+  "short_name": "Sångbok Gitarr",
+  "description": "Simons sångbok — visor och låtar med ackord för gitarr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2efe6",
+  "theme_color": "#42594a",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

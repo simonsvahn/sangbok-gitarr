@@ -1,0 +1,25 @@
+{
+  "id": "./gitarren.html",
+  "name": "Gitarren — spelbar sångbok",
+  "short_name": "Gitarren",
+  "description": "Simons spelbara sångbok med 6-/12-strängad gitarr och manuellt styrt autokomp",
+  "start_url": "./gitarren.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#04060d",
+  "theme_color": "#0c1526",
+  "icons": [
+    {
+      "src": "gitarren-icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "gitarren-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

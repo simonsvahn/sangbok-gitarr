@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Sångbok Gitarr</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sångbok Gitarr">
+<meta name="theme-color" content="#42594a">
+<style>
+/* ==========================================================================
+   SÅNGBOKEN — identitet: "tvåfärgstryck"
+   Papper + två tryckfärger: falurött (ackord, det ögat följer) och
+   tallgrönt (struktur: räls, aktiva val, register). Display-antikva för
+   titlar (Iowan Old Style finns på macOS/iOS), humanist-sans för bröd,
+   mono för ackord. Mörkt läge = lägereldsläge (varmsvart + glöd).
+   ========================================================================== */
+:root{
+  --paper:#f2efe6; --ink:#211e18; --muted:#7c7768; --card:#fbf9f2;
+  --border:#dcd6c4; --falu:#8a2b1d; --pine:#42594a;
+  --chip:#e9e4d4; --chip-fg:#4a463b;
+  --display:"Iowan Old Style","Palatino Nova",Palatino,"Book Antiqua",Georgia,serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{ /* lägereldsläge */
+    --paper:#171310; --ink:#ece4d6; --muted:#97907e; --card:#211b16;
+    --border:#352d24; --falu:#f0995c; --pine:#7d9a84;
+    --chip:#2a231d; --chip-fg:#c9c0af;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+button{font:inherit;color:var(--ink);background:var(--chip);border:1px solid var(--border);
+  border-radius:8px;padding:8px 12px;cursor:pointer;touch-action:manipulation;}
+button:active{opacity:.7}
+:focus-visible{outline:2px solid var(--pine);outline-offset:1px}
+
+/* ---- pärmen ---- */
+.cover{max-width:640px;margin:0 auto;padding:44px 20px 60px;}
+.masthead{font-family:var(--display);font-weight:600;font-size:2.7rem;line-height:1.05;
+  letter-spacing:-.01em;margin:0;}
+.masthead small{display:block;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:.85rem;font-weight:400;color:var(--muted);letter-spacing:.02em;margin-top:8px;}
+.doubleline{border:none;border-top:4px double var(--pine);margin:18px 0 22px;}
+.coversearch{width:100%;padding:12px 16px;font-size:1.05rem;border-radius:10px;
+  border:1px solid var(--border);background:var(--card);color:var(--ink);outline:none;}
+.coversearch::placeholder{color:var(--muted)}
+.covergrp{margin-top:30px;}
+.grplabel{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--pine);
+  font-weight:700;margin:0 0 10px;display:flex;align-items:center;gap:10px;}
+.grplabel::after{content:"";flex:1;border-top:1px solid var(--border);}
+.kapitel{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.kap{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:14px 16px;cursor:pointer;}
+.kap .kn{font-family:var(--display);font-size:1.12rem;font-weight:600;line-height:1.2;}
+.kap .kc{color:var(--muted);font-size:.8rem;margin-top:3px;font-variant-numeric:tabular-nums;}
+.reglist{display:flex;flex-direction:column;gap:8px;}
+.reg{display:flex;justify-content:space-between;align-items:baseline;background:var(--card);
+  border:1px solid var(--border);border-radius:8px;padding:12px 16px;cursor:pointer;}
+.reg .rn{font-family:var(--display);font-size:1.05rem;font-weight:600;}
+.reg .rc{color:var(--muted);font-size:.8rem;font-variant-numeric:tabular-nums;}
+
+/* ---- listvy ---- */
+.top{padding:16px 16px 4px;max-width:680px;margin:0 auto;}
+.crumb{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.crumb .ctx{font-family:var(--display);font-size:1.35rem;font-weight:600;flex:1;
+  display:flex;align-items:baseline;gap:8px;min-width:0;}
+.crumb .ctx .count{font-size:.8rem;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,
+  "Segoe UI",Roboto,sans-serif;font-weight:400;white-space:nowrap;}
+.crumb .drop{font-size:.78rem;color:var(--muted);border:1px dashed var(--border);
+  border-radius:999px;padding:3px 10px;cursor:pointer;white-space:nowrap;}
+.top input[type=search]{width:100%;padding:10px 14px;font-size:1rem;border-radius:10px;
+  border:1px solid var(--border);background:var(--card);color:var(--ink);outline:none;}
+.refinebtn{margin:8px 0 0;font-size:.8rem;color:var(--pine);background:none;border:none;
+  padding:4px 0;cursor:pointer;font-weight:600;}
+.filters{max-width:680px;margin:6px auto 0;padding:0 16px;display:flex;flex-direction:column;gap:5px;}
+.filters[hidden]{display:none}
+.facet{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.flabel{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+  min-width:3.6em;font-weight:700;}
+.artistsel{flex:1;min-width:150px;padding:5px 11px;font-size:.85rem;border-radius:999px;
+  border:1px solid var(--border);background:var(--card);color:var(--ink);outline:none;}
+.chipbtn{font-size:.82rem;padding:5px 11px;border-radius:999px;background:var(--chip);
+  color:var(--chip-fg);border:1px solid var(--border);cursor:pointer;user-select:none;}
+.chipbtn.on{background:var(--pine);color:var(--paper);border-color:var(--pine);}
+.clearbtn{font-size:.82rem;padding:5px 11px;border-radius:999px;background:none;
+  border:1px dashed var(--border);color:var(--muted);cursor:pointer;}
+.songlist{list-style:none;margin:12px auto 40px;padding:0 26px 0 16px;max-width:680px;}
+.songlist li{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:11px 16px;margin-bottom:8px;cursor:pointer;display:flex;
+  justify-content:space-between;align-items:center;gap:12px;}
+.songlist .t{font-family:var(--display);font-weight:600;font-size:1.05rem;}
+.songlist .a{color:var(--muted);font-size:.85rem;margin-top:1px}
+.songlist .minitags{margin-top:5px;display:flex;flex-wrap:wrap;gap:4px;}
+.mini{font-size:.66rem;padding:1px 7px;border-radius:999px;background:var(--chip);color:var(--muted);}
+.mini.warn{color:var(--falu);border:1px solid var(--falu);background:none;}
+.songlist .k{color:var(--muted);font-size:.83rem;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.empty{text-align:center;color:var(--muted);padding:40px 16px}
+.rail{position:fixed;right:1px;top:50%;transform:translateY(-50%);z-index:5;
+  display:flex;flex-direction:column;align-items:center;padding:2px;}
+.rail span{font-size:.6rem;line-height:1.45;color:var(--pine);font-weight:700;
+  padding:0 5px;cursor:pointer;user-select:none;}
+.rail span.dim{color:var(--border);cursor:default;}
+
+/* ---- kvällens lista ---- */
+.songlist li > div:first-child{flex:1;min-width:0}
+.addbtn{flex:none;width:28px;height:28px;padding:0;border-radius:999px;
+  border:1px solid var(--border);background:var(--chip);color:var(--chip-fg);
+  font-size:1.05rem;line-height:1;display:flex;align-items:center;justify-content:center;}
+.addbtn.in{background:var(--pine);color:var(--paper);border-color:var(--pine);}
+.reg.dim{opacity:.55}
+.settxt{flex:1;min-width:0;cursor:pointer;}
+.setops{display:flex;gap:4px;flex:none;}
+.setop{width:30px;height:30px;padding:0;border-radius:999px;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;}
+.setop:disabled{opacity:.35;cursor:default;}
+.setfoot{max-width:680px;margin:0 auto 40px;padding:0 16px;}
+.setpos{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.85rem;
+  min-width:2.6em;text-align:center;}
+
+/* ---- säkerhetskopiering + textträff ---- */
+.backup{max-width:640px;margin:14px auto;padding:0 16px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;}
+.backup textarea{width:100%;border:1px solid var(--border);border-radius:10px;background:var(--card);
+  color:var(--ink);padding:10px;font:inherit;font-size:.85rem;}
+.dimtext{color:var(--muted);font-size:.85rem;line-height:1.5;margin:0;}
+.mini.texttraff{color:var(--falu);border:1px solid var(--falu);background:none;}
+
+/* ---- sidnummer i bokordning ---- */
+.sidnr{color:var(--pine);font-weight:600;}
+
+/* ---- variantväxlare ---- */
+.varvaxel{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px;}
+.vv{user-select:none;}
+.vv.on{background:var(--falu);border-color:var(--falu);color:var(--paper);}
+.vbadge{border:1px solid var(--pine);color:var(--pine);background:none;}
+
+/* ---- aktiva filter ---- */
+.activef{max-width:680px;margin:8px auto 0;padding:0 16px;display:flex;flex-wrap:wrap;gap:6px;}
+.afchip{display:inline-flex;align-items:center;gap:7px;font-size:.8rem;padding:4px 11px;
+  border-radius:999px;background:var(--pine);color:var(--paper);border:1px solid var(--pine);}
+.afchip b{cursor:pointer;font-weight:700;opacity:.85;padding:0 1px;}
+.afclear{display:inline-flex;align-items:center;font-size:.8rem;padding:4px 11px;border-radius:999px;
+  background:none;border:1px dashed var(--border);color:var(--muted);cursor:pointer;}
+
+/* ---- favoriter & arkiv ---- */
+.favstar{color:var(--falu);font-size:.8em;}
+.arkexport{max-width:680px;margin:10px auto 0;padding:0 16px;}
+.arkrad{margin:40px 0 12px;text-align:center;}
+.arknot{font-size:.8rem;color:var(--muted);font-style:italic;}
+
+/* ---- artistregister ---- */
+.artreg{max-width:680px;margin:0 auto;padding:0 16px 50px;}
+.artletter{font-family:var(--display);font-size:1.2rem;font-weight:600;color:var(--pine);
+  margin:20px 0 6px;display:flex;align-items:center;gap:10px;}
+.artletter::after{content:"";flex:1;border-top:1px solid var(--border);}
+.artrow{display:flex;justify-content:space-between;align-items:baseline;padding:8px 2px;
+  border-bottom:1px dotted var(--border);cursor:pointer;}
+.artrow .an{font-size:.95rem;}
+.artrow .ac{color:var(--muted);font-size:.8rem;font-variant-numeric:tabular-nums;}
+
+/* ---- låtvy ---- */
+.toolbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:8px;
+  padding:10px 12px;background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.toolbar .grp{display:flex;align-items:center;gap:4px}
+.toolbar .keylbl{min-width:2.4em;text-align:center;font-weight:700;color:var(--falu);
+  font-family:var(--mono);}
+.toolbar .spacer{flex:1}
+.toolbar input[type=range]{width:80px;accent-color:var(--pine)}
+.song{max-width:760px;margin:0 auto;padding:16px 16px 55vh;}
+.song h2{margin:10px 0 2px;font-family:var(--display);font-weight:600;font-size:1.8rem;
+  line-height:1.1;text-wrap:balance;}
+.song .meta{color:var(--muted);margin:2px 0 4px;font-size:.88rem}
+/* Faktarutan: etikett + värde radvis. Kolumnen är smal med flit — etiketterna
+   ska kunna skummas lodrätt, värdena stå på samma baslinje. */
+.song .fakta{display:grid;grid-template-columns:auto 1fr;gap:1px 12px;
+  margin:6px 0 8px;font-size:.86rem}
+.song .fakta dt{color:var(--muted);font-size:.76rem;letter-spacing:.02em;
+  text-transform:uppercase;align-self:baseline;padding-top:1px}
+.song .fakta dd{margin:0;color:var(--ink)}
+.song .taggrad{color:var(--muted);font-size:.78rem;margin:0 0 6px}
+.song .kalla{color:var(--muted);margin:0 0 6px;font-size:.78rem}
+.song .fakta a,.song .kalla a{color:var(--pine);text-decoration:none;border-bottom:1px dotted var(--pine)}
+.song .headcomment{color:var(--muted);font-style:italic;font-size:.85rem;margin:0 0 4px;}
+.song .body{margin-top:20px;}
+.section{margin:0 0 1.5em}
+.section.chorus{border-left:4px double var(--pine);padding-left:12px}
+.section.comment{color:var(--muted);font-style:italic;font-size:.9em;}
+pre.tab{overflow-x:auto;font-size:.72rem;line-height:1.35;background:var(--card);
+  border:1px solid var(--border);border-radius:8px;padding:10px;font-family:var(--mono);}
+.line{font-size:var(--fs,1rem);line-height:1.32;margin-bottom:.4em}
+.seg{display:inline-block;vertical-align:bottom;white-space:pre-wrap}
+/* Luft efter ackordnamnet: segmentet är minst så brett som sitt ackord, så
+   utan detta klibbar två närliggande ackord ihop till "EmB7" när texten mellan
+   dem är kortare än namnen. Gäller textrader; rena ackordrader har .ackordrad. */
+.chord{display:block;font-family:var(--mono);padding-right:.55em;
+  font-weight:700;font-size:.8em;line-height:1.15;color:var(--falu);cursor:pointer}
+.seg.hasch{cursor:pointer}
+/* Ren ackordrad utan sångtext: segmenten är bara så breda som ackordnamnet,
+   så utan detta nuddar de varandra ("GGsus4"). Sista segmentet får inget
+   efterhäng. Källans egna mellanrum ligger kvar och adderas till gapet. */
+.line.ackordrad .seg{margin-right:.9em}
+.line.ackordrad .seg:last-child{margin-right:0}
+
+/* ---- ackordblad (bottenark) ---- */
+.sheet{position:fixed;bottom:0;left:0;right:0;z-index:30;max-width:760px;margin:0 auto;
+  background:var(--card);border-top:1px solid var(--border);color:var(--ink);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));
+  display:flex;align-items:center;justify-content:center;gap:22px;cursor:pointer;}
+.sheet[hidden]{display:none}
+.shname{font-family:var(--display);font-weight:600;font-size:1.7rem;color:var(--falu);}
+.shnone{color:var(--muted);font-size:.9rem;}
+.sheet svg{display:block}
+@media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto!important;transition:none!important} }
+
+/* ---- utskrift ---- */
+#printroot{display:none}
+@media print{
+  body>#app,.sheet,.rail,.toolbar{display:none!important}
+  #printroot{display:block}
+  body{background:#fff;color:#000}
+  .ptitle{text-align:center;padding-top:35vh;break-after:page;page-break-after:always;}
+  .ptitle h1{font-family:var(--display);font-weight:600;font-size:30pt;margin:0;}
+  .ptitle p{color:#555;font-size:11pt;}
+  .pregister{break-after:page;page-break-after:always;}
+  .pregister h2{font-family:var(--display);font-weight:600;}
+  .pregister ol{columns:2;column-gap:28pt;font-size:9.5pt;margin:0;padding-left:16pt;}
+  .pregister li{margin-bottom:2pt;}
+  .psong{break-inside:avoid-page;page-break-inside:avoid;padding-top:12px;}
+  .psong h2{font-family:var(--display);font-weight:600;font-size:14pt;margin:0 0 2pt;}
+  .pmeta{color:#555;font-size:8.5pt;margin:0 0 6pt;}
+  #printroot .line{font-size:9.5pt;margin-bottom:.35em;}
+  #printroot pre.tab{font-size:7pt;}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="printroot"></div>
+<div id="sheet" class="sheet" hidden></div>
+<script type="text/plain" id="appkod">
+"use strict";
+const SONGS = window.__DATA__;
+
+/* ---------- lagring ---------- */
+const store = {
+  get(k,d){ try{const v=localStorage.getItem("gb:"+k); return v===null?d:JSON.parse(v);}catch(e){return d;} },
+  set(k,v){ try{localStorage.setItem("gb:"+k, JSON.stringify(v));}catch(e){} }
+};
+
+/* ---------- transponering (H = B, svensk notation bevaras vid 0) ---------- */
+const NOTES = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+const ALIAS = {"Db":"C#","Eb":"D#","Gb":"F#","Ab":"G#","Bb":"A#","H":"B","Hb":"A#"};
+function trans(chord, n){
+  if(!n) return chord;
+  return chord.replace(/[A-H](#|b)?/g, m => {
+    const i = NOTES.indexOf(ALIAS[m] || m);
+    return i < 0 ? m : NOTES[(i + n%12 + 12) % 12];
+  });
+}
+
+/* ---------- kapitel (tillfällen) ---------- */
+const KAPITEL = [
+  {id:"lagerbal", namn:"Lägerbål & scout",   tags:["lägerbål","scout","vässarö","kanon","vandring","lek"]},
+  {id:"allsang",  namn:"Allsång",            tags:["allsång"]},
+  {id:"barn",     namn:"Barn & familj",      tags:["barn","barnfilm","rörelsevisa","vaggvisa","familj","djur","disney"]},
+  {id:"jul",      namn:"Jul & lucia",        tags:["jul","lucia","advent","vinter"]},
+  {id:"sommar",   namn:"Sommar & midsommar", tags:["sommar","midsommar","vår","skärgård"]},
+  {id:"fest",     namn:"Fest & snaps",       tags:["snapsvisa","snapsvisor","fest","bröllop","student","nyår"]},
+  {id:"nostalgi", namn:"Nostalgi & schlager",tags:["nostalgi","schlager","dansband","doo-wop","tv"]},
+];
+KAPITEL.forEach(k => { const t=new Set(k.tags); k.set=t;
+  k.antal = SONGS.filter(s => s.tags.some(x=>t.has(x))).length; });
+
+/* ---------- offline (service worker) ---------- */
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost"))
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+
+/* ---------- state ---------- */
+const app = document.getElementById("app");
+let fontSize = store.get("fs", 1.0);
+let speed = store.get("speed", 30);
+let fGenre = new Set(store.get("fgenre", []));
+let fTema = new Set(store.get("ftema", []));
+let fLang = new Set(store.get("flang", []));
+let fDiff = new Set(store.get("fdiff", []));
+let fArtist = store.get("fartist", "");
+let fKalla = store.get("fkalla", "");
+let kapitel = null;          // aktivt kapitel-objekt eller null
+let setlist = store.get("setlist", []).filter(sl => SONGS.some(s => s.slug === sl)); // kvällens lista (slugs)
+let query = "";
+let refineOpen = false;
+let returnScroll = {list: 0, set: 0};   // scrollläge att återvända till efter låtvyn
+let favs  = new Set(store.get("favs", []).filter(sl => SONGS.some(s => s.slug === sl)));  // ★
+let arkiv = new Set(store.get("arkiv", []).filter(sl => SONGS.some(s => s.slug === sl))); // lokalt arkiverade, väntar på filflytt
+let fFavs = false, fArkiv = false;   // vy-flaggor (sparas ej)
+const isArk = s => !!s.arkiverad || arkiv.has(s.slug);
+
+/* ---------- variantmotor: en rad per låt, varianter växlas i låtvyn ---------- */
+const GRUPPER = new Map();
+SONGS.forEach((s, i) => { s._ix = i; });
+SONGS.forEach((s, i) => {
+  const g = s.grupp || s.slug;
+  if(!GRUPPER.has(g)) GRUPPER.set(g, []);
+  GRUPPER.get(g).push(i);
+});
+GRUPPER.forEach(ix => {          // unika etiketter inom gruppen
+  const sedd = {};
+  ix.forEach(i => {
+    let e = SONGS[i].variantEtikett || "Version";
+    if(sedd[e]){ sedd[e]++; SONGS[i].variantEtikett = e + " " + sedd[e]; }
+    else sedd[e] = 1;
+  });
+});
+const GLIST = [...GRUPPER.keys()];
+function gruppTitel(g){
+  const ix = GRUPPER.get(g);
+  if(ix.length === 1) return SONGS[ix[0]].title;
+  return ix.map(i => SONGS[i].title).sort((a,b) => a.length - b.length)[0];
+}
+function vprio(s){
+  if((s.variantEtikett||"").startsWith("Ultimate Guitar")) return 0;
+  if(s.variantEtikett === "Lätt") return 1;
+  return 2;
+}
+/* fulltextsök: lat index över sångtexterna, byggt vid första sökningen */
+let TEXTIX = null;
+function byggTextIx(){
+  TEXTIX = SONGS.map(s => s.sections.map(sec =>
+    sec.lines.map(line => typeof line === "string" ? line
+      : line.map(seg => seg[1]).join("")).join(" ")
+  ).join(" ").toLowerCase());
+}
+function titelTraff(s, q){
+  return s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q);
+}
+function textTraff(i, q){
+  if(!TEXTIX) byggTextIx();
+  return TEXTIX[i].includes(q);
+}
+function matchande(g){ return GRUPPER.get(g).filter(i => matches(SONGS[i])); }
+function valjRep(g, kandidater){
+  const ixs = (kandidater && kandidater.length) ? kandidater : GRUPPER.get(g);
+  const sparad = store.get("var:"+g, null);
+  if(sparad){ const hit = ixs.find(i => SONGS[i].slug === sparad); if(hit !== undefined) return hit; }
+  return ixs.slice().sort((a,b) => vprio(SONGS[a]) - vprio(SONGS[b]))[0];
+}
+function gruppAktiv(g){ return GRUPPER.get(g).some(i => !isArk(SONGS[i])); }
+function gruppSida(g){
+  const s = GRUPPER.get(g).map(i => SONGS[i].sida || 0).filter(x => x > 0);
+  return s.length ? Math.min(...s) : 9999;
+}
+function sidEtikett(n){ return n > 200 ? "1:a uppl. s. " + (n - 200) : "s. " + n; }
+let scrolling = false, lastT = null, wakeLock = null, acc = 0;
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+/* ---------- filterdata ---------- */
+const GENRETAGS = new Set(["rock","pop","folk","visa","country","soul","gospel","punk","psalm","ballad","blues","reggae"]);
+const TAGCOUNT = {};
+SONGS.forEach(s => s.tags.forEach(t => TAGCOUNT[t] = (TAGCOUNT[t]||0)+1));
+const byCount = (a,b) => (TAGCOUNT[b]-TAGCOUNT[a]) || a.localeCompare(b,"sv");
+const GENRES = Object.keys(TAGCOUNT).filter(t => GENRETAGS.has(t)).sort(byCount);
+const TEMAN  = Object.keys(TAGCOUNT).filter(t => !GENRETAGS.has(t)).sort(byCount);
+const ALLLANG = [...new Set(SONGS.map(s => s.language).filter(Boolean))].sort();
+const DIFFS = ["easy","medium","hard"].filter(d => SONGS.some(s => s.difficulty === d));
+const ARTCOUNT = {}, _artG = {};
+SONGS.forEach(s => { if(s.artist){ (_artG[s.artist] = _artG[s.artist] || new Set()).add(s.grupp || s.slug); } });
+Object.keys(_artG).forEach(a => ARTCOUNT[a] = _artG[a].size);
+const ARTISTS = Object.keys(ARTCOUNT).sort((a,b)=>a.localeCompare(b,"sv"));
+const KALLCOUNT = {}, _kalG = {};
+SONGS.forEach(s => (s.kallor||[]).forEach(k => { (_kalG[k] = _kalG[k] || new Set()).add(s.grupp || s.slug); }));
+Object.keys(_kalG).forEach(k => KALLCOUNT[k] = _kalG[k].size);
+const KALLREG = Object.keys(KALLCOUNT).sort((a,b)=>a.localeCompare(b,"sv"));
+const INITIALS = new Set(SONGS.map(s => initial(s.title)));
+
+function initial(t){
+  const c = (t||"").charAt(0).toUpperCase();
+  return /[0-9]/.test(c) ? "#" : c;
+}
+
+function matches(s){
+  if(!!fArkiv !== isArk(s)) return false;
+  if(fFavs && !favs.has(s.slug)) return false;
+  const q = query.trim().toLowerCase();
+  if(q && !titelTraff(s, q) && !(q.length >= 3 && textTraff(s._ix, q))) return false;
+  if(kapitel && !s.tags.some(t => kapitel.set.has(t))) return false;
+  // ELLER inom varje facett, OCH mellan facetter
+  if(fGenre.size && !s.tags.some(t => fGenre.has(t))) return false;
+  if(fTema.size  && !s.tags.some(t => fTema.has(t)))  return false;
+  if(fLang.size  && !fLang.has(s.language)) return false;
+  if(fDiff.size  && !fDiff.has(s.difficulty)) return false;
+  if(fArtist && !s.artist.toLowerCase().includes(fArtist.toLowerCase())) return false;
+  if(fKalla && !(s.kallor||[]).includes(fKalla)) return false;
+  return true;
+}
+function anyFilter(){ return fGenre.size||fTema.size||fDiff.size||fLang.size||fArtist||fKalla||fFavs; }
+function clearFilters(){
+  fGenre.clear(); fTema.clear(); fDiff.clear(); fLang.clear(); fArtist=""; fKalla=""; fFavs=false;
+  ["fgenre","ftema","fdiff","flang"].forEach(k=>store.set(k,[])); store.set("fartist",""); store.set("fkalla","");
+}
+
+/* ---------- pärmen ---------- */
+function showCover(){
+  stopScroll();
+  document.title = "Sångbok Gitarr";
+  kapitel = null; query = ""; fFavs = false; fArkiv = false;
+  const grpAkt = GLIST.filter(gruppAktiv);
+  const AKTIVA = {length: grpAkt.length};   // gruppantal för pärmens räknare
+  const harAktiv = f => g => GRUPPER.get(g).some(i => !isArk(SONGS[i]) && f(SONGS[i]));
+  const arkN = GLIST.filter(g => GRUPPER.get(g).some(i => isArk(SONGS[i]))).length;
+  KAPITEL.forEach(k => { k.antal = grpAkt.filter(harAktiv(s => s.tags.some(x=>k.set.has(x)))).length; });
+  const favN = grpAkt.filter(harAktiv(s => favs.has(s.slug))).length;
+  const langRows = ALLLANG.map(l => {
+    const n = grpAkt.filter(harAktiv(s => s.language === l)).length;
+    return `<div class="reg" data-lang="${esc(l)}"><span class="rn">${esc(cap(l))}</span><span class="rc">${n} låtar</span></div>`;
+  }).join("");
+  app.innerHTML = `
+    <div class="cover">
+      <h1 class="masthead">Sångbok Gitarr<small>${SONGS.length} visor &amp; låtar</small></h1>
+      <hr class="doubleline">
+      <input class="coversearch" id="cq" type="search" placeholder="Sök låt, artist eller textrad…" autocomplete="off">
+      <div class="covergrp">
+        <p class="grplabel">Tillfällen</p>
+        <div class="kapitel">
+          ${KAPITEL.map(k=>`<div class="kap" data-kap="${k.id}">
+             <div class="kn">${esc(k.namn)}</div><div class="kc">${k.antal} låtar</div></div>`).join("")}
+        </div>
+      </div>
+      <div class="covergrp">
+        <p class="grplabel">Register</p>
+        <div class="reglist">
+          <div class="reg${setlist.length?"":" dim"}" id="regset"><span class="rn">Kvällens lista</span><span class="rc">${setlist.length} låtar</span></div>
+          <div class="reg" id="regalla"><span class="rn">Alla låtar A–Ö</span><span class="rc">${AKTIVA.length}</span></div>
+          ${favN?`<div class="reg" id="regfavs"><span class="rn">Favoriter</span><span class="rc">${favN} låtar</span></div>`:""}
+          <div class="reg" id="regartist"><span class="rn">Artister</span><span class="rc">${ARTISTS.length}</span></div>
+          ${KALLREG.length?`<div class="reg" id="regkalla"><span class="rn">Källor</span><span class="rc">${KALLREG.length}</span></div>`:""}
+          ${langRows}
+          ${arkN?`<div class="reg dim" id="regarkiv"><span class="rn">Arkiverade</span><span class="rc">${arkN} låtar</span></div>`:""}
+          <div class="reg" id="regprint"><span class="rn">Skriv ut häfte</span><span class="rc">hela boken</span></div>
+          <div class="reg" id="regbackup"><span class="rn">Säkerhetskopiera</span><span class="rc">★ · listor · capo</span></div>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById("cq").addEventListener("focus", () => { showList({focusSearch:true}); });
+  document.querySelectorAll("[data-kap]").forEach(el => el.onclick = () => {
+    kapitel = KAPITEL.find(k=>k.id===el.dataset.kap); showList();
+  });
+  document.getElementById("regset").onclick = showSetlist;
+  document.getElementById("regalla").onclick = () => showList();
+  document.getElementById("regartist").onclick = showArtists;
+  const rk = document.getElementById("regkalla");
+  if(rk) rk.onclick = showKallor;
+  const rf = document.getElementById("regfavs");
+  if(rf) rf.onclick = () => { clearFilters(); fFavs = true; showList(); };
+  const ra = document.getElementById("regarkiv");
+  if(ra) ra.onclick = () => { clearFilters(); fArkiv = true; showList(); };
+  const rb = document.getElementById("regbackup");
+  if(rb) rb.onclick = showBackup;
+  document.getElementById("regprint").onclick = () => printBook(
+    GLIST.filter(gruppAktiv).map(g => SONGS[valjRep(g, GRUPPER.get(g).filter(i=>!isArk(SONGS[i])))]), "Sångbok Gitarr");
+  document.querySelectorAll("[data-lang]").forEach(el => el.onclick = () => {
+    fLang = new Set([el.dataset.lang]); store.set("flang",[...fLang]); showList();
+  });
+  window.scrollTo(0,0);
+}
+function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+/* ---------- aktiva filter (alltid synliga, alltid avstängbara) ---------- */
+function activeChips(){
+  const dLabel = {easy:"lätt", medium:"medel", hard:"svår"};
+  const chips = [];
+  if(kapitel) chips.push({lbl: kapitel.namn, clear: () => { kapitel = null; }});
+  fGenre.forEach(v => chips.push({lbl: v, clear: () => { fGenre.delete(v); store.set("fgenre",[...fGenre]); }}));
+  fTema.forEach(v => chips.push({lbl: v, clear: () => { fTema.delete(v); store.set("ftema",[...fTema]); }}));
+  fDiff.forEach(v => chips.push({lbl: dLabel[v]||v, clear: () => { fDiff.delete(v); store.set("fdiff",[...fDiff]); }}));
+  fLang.forEach(v => chips.push({lbl: v, clear: () => { fLang.delete(v); store.set("flang",[...fLang]); }}));
+  if(fArtist) chips.push({lbl: "Artist: "+fArtist, clear: () => { fArtist=""; store.set("fartist",""); }});
+  if(fKalla) chips.push({lbl: "Källa: "+fKalla, clear: () => { fKalla=""; store.set("fkalla",""); }});
+  if(fFavs) chips.push({lbl: "★ Favoriter", clear: () => { fFavs=false; }});
+  return chips;
+}
+function renderActive(){
+  const holder = document.getElementById("activef");
+  if(!holder) return;
+  const chips = activeChips();
+  holder.innerHTML = chips.map((c,i) =>
+      `<span class="afchip">${esc(c.lbl)}<b data-af="${i}" role="button" aria-label="Ta bort filtret">&#10005;</b></span>`).join("")
+    + (chips.length > 1 ? `<span class="afclear" id="afclear">rensa alla</span>` : "");
+  holder.querySelectorAll("[data-af]").forEach(el => el.onclick = () => {
+    chips[+el.dataset.af].clear();
+    document.title = ctxName()+" – Sångbok Gitarr";
+    renderChips(); renderActive(); renderList();
+    const ctxEl = document.querySelector(".ctx");
+    if(ctxEl) ctxEl.innerHTML = `${esc(ctxName())} <span class="count" id="count"></span>`, renderList();
+  });
+  const cl = document.getElementById("afclear");
+  if(cl) cl.onclick = () => {
+    kapitel = null; clearFilters();
+    document.title = ctxName()+" – Sångbok Gitarr";
+    renderChips(); renderActive();
+    const ctxEl = document.querySelector(".ctx");
+    if(ctxEl) ctxEl.innerHTML = `${esc(ctxName())} <span class="count" id="count"></span>`;
+    renderList();
+  };
+}
+
+/* ---------- listvy ---------- */
+function ctxName(){
+  if(fArkiv) return "Arkiverade";
+  if(fFavs) return "Favoriter";
+  if(kapitel) return kapitel.namn;
+  if(fArtist) return fArtist;
+  if(fKalla) return fKalla;
+  if(fLang.size===1) return cap([...fLang][0]);
+  return "Alla låtar";
+}
+function showList(opt){
+  stopScroll();
+  document.title = ctxName()+" – Sångbok Gitarr";
+  app.innerHTML = `
+    <header class="top">
+      <div class="crumb">
+        <button id="home" aria-label="Till pärmen">&#8962;</button>
+        <span class="ctx">${esc(ctxName())} <span class="count" id="count"></span></span>
+        <button class="chipbtn" id="printbtn" title="Skriv ut häfte av träffarna">Skriv ut</button>
+      </div>
+      <input id="q" type="search" placeholder="Sök låt, artist eller textrad…" autocomplete="off" value="${esc(query)}">
+      <button class="refinebtn" id="refine">${refineOpen?"Dölj filter":"Förfina&nbsp;&#9662;"}</button>
+    </header>
+    <div class="activef" id="activef"></div>
+    <div class="filters" id="filters" ${refineOpen?"":"hidden"}></div>
+    ${fArkiv && arkiv.size?`<div class="arkexport"><button class="chipbtn" id="arkcopy">Kopiera flyttlista (${arkiv.size} väntar på flytt)</button></div>`:""}
+    <ul class="songlist" id="list"></ul>
+    <nav class="rail" id="rail" aria-label="Bokstavsregister"></nav>`;
+  document.getElementById("home").onclick = showCover;
+  document.getElementById("printbtn").onclick = () => printBook(
+    GLIST.map(g=>[g,matchande(g)]).filter(([g,ix])=>ix.length).map(([g,ix])=>SONGS[valjRep(g,ix)]), ctxName());
+  const ac = document.getElementById("arkcopy");
+  if(ac) ac.onclick = async () => {
+    const lista = [...arkiv].join("\n");
+    try { await navigator.clipboard.writeText(lista); ac.textContent = "Kopierad ✓"; }
+    catch(e){ window.prompt("Kopiera listan manuellt:", lista); }
+  };
+  const qEl = document.getElementById("q");
+  qEl.addEventListener("input", e => { query = e.target.value; renderList(); });
+  document.getElementById("refine").onclick = () => {
+    refineOpen = !refineOpen;
+    document.getElementById("filters").hidden = !refineOpen;
+    document.getElementById("refine").innerHTML = refineOpen?"Dölj filter":"Förfina&nbsp;&#9662;";
+  };
+  renderChips();
+  renderActive();
+  renderList();
+  renderRail();
+  if(opt && opt.focusSearch) qEl.focus();
+  window.scrollTo(0, opt && opt.restore ? returnScroll.list : 0);
+}
+function chip(label, on, extra){
+  return `<span class="chipbtn${on?" on":""}" ${extra}>${esc(label)}</span>`;
+}
+const SETS = {genre:[()=>fGenre,"fgenre"], tema:[()=>fTema,"ftema"],
+              diff:[()=>fDiff,"fdiff"], lang:[()=>fLang,"flang"]};
+function facetRow(label, pairs, set, key){
+  if(!pairs.length) return "";
+  return `<div class="facet"><span class="flabel">${label}</span>`
+    + pairs.map(([val,lab]) => chip(lab, set.has(val), `data-set="${key}" data-val="${esc(val)}"`)).join("")
+    + `</div>`;
+}
+function renderChips(){
+  const dLabel = {easy:"lätt", medium:"medel", hard:"svår"};
+  let html = "";
+  html += facetRow("Genre", GENRES.map(t=>[t,t]), fGenre, "genre");
+  html += facetRow("Tema", TEMAN.map(t=>[t,t]), fTema, "tema");
+  html += facetRow("Nivå", DIFFS.map(d=>[d, dLabel[d]||d]), fDiff, "diff");
+  html += facetRow("Språk", ALLLANG.map(l=>[l,l]), fLang, "lang");
+  html += `<div class="facet"><span class="flabel">Artist</span>`
+    + `<input class="artistsel" id="artistsel" list="artistlist" placeholder="alla artister…"`
+    + ` value="${esc(fArtist)}" autocomplete="off">`
+    + `<datalist id="artistlist">${ARTISTS.map(a=>`<option value="${esc(a)}">`).join("")}</datalist></div>`;
+  if(anyFilter())
+    html += `<div class="facet"><span class="clearbtn" id="clear">rensa alla filter</span></div>`;
+  const el = document.getElementById("filters");
+  el.innerHTML = html;
+  el.querySelectorAll("[data-set]").forEach(c => c.onclick = () => {
+    const [getSet, key] = SETS[c.dataset.set]; toggle(getSet(), c.dataset.val, key);
+  });
+  const asel = document.getElementById("artistsel");
+  if(asel) asel.oninput = () => { fArtist = asel.value.trim(); store.set("fartist", fArtist); renderActive(); renderList(); };
+  const c = document.getElementById("clear");
+  if(c) c.onclick = () => { clearFilters(); renderChips(); renderActive(); renderList(); };
+}
+function toggle(set, val, key){
+  set.has(val) ? set.delete(val) : set.add(val);
+  store.set(key, [...set]);
+  renderChips(); renderActive(); renderList();
+}
+function renderList(){
+  let ghits = GLIST.map(g => [g, matchande(g)]).filter(([g, ix]) => ix.length);
+  const sidLage = fKalla === "Vässarö Sångboken" && !query.trim();
+  if(sidLage) ghits = ghits.slice().sort((a, b) => gruppSida(a[0]) - gruppSida(b[0]));
+  const q = query.trim().toLowerCase();
+  const grpTitelTraff = g => GRUPPER.get(g).some(i => titelTraff(SONGS[i], q));
+  if(q) ghits = ghits.slice().sort((a, b) => (grpTitelTraff(b[0]) ? 1 : 0) - (grpTitelTraff(a[0]) ? 1 : 0));
+  const tot = fArkiv
+    ? GLIST.filter(g => GRUPPER.get(g).some(i => isArk(SONGS[i]))).length
+    : GLIST.filter(gruppAktiv).length;
+  document.getElementById("count").textContent = `${ghits.length} av ${tot}`;
+  const ul = document.getElementById("list");
+  if(!ghits.length){ ul.innerHTML = `<div class="empty">Inga träffar</div>`; return; }
+  ul.innerHTML = ghits.map(([g, ix]) => {
+    const i = valjRep(g, ix), s = SONGS[i];
+    const nvar = GRUPPER.get(g).length;
+    const harFav = GRUPPER.get(g).some(j => favs.has(SONGS[j].slug));
+    return `
+    <li data-i="${i}" data-init="${esc(initial(gruppTitel(g)))}">
+      <div>
+        <div class="t">${esc(gruppTitel(g))}${harFav?` <span class="favstar">★</span>`:""}</div>
+        <div class="a">${esc(s.artist)}</div>
+        <div class="minitags">${q && !grpTitelTraff(g)?`<span class="mini texttraff">textträff</span>`:""}${nvar>1?`<span class="mini vbadge">${nvar} versioner</span>`:""}${s.tags.map(t=>`<span class="mini">${esc(t)}</span>`).join("")}${s.utanAckord?`<span class="mini warn">utan ackord</span>`:""}</div>
+      </div>
+      <button class="addbtn${inSet(s.slug)?" in":""}" data-slug="${esc(s.slug)}" aria-pressed="${inSet(s.slug)}" aria-label="Kvällens lista">${inSet(s.slug)?"✓":"+"}</button>
+      <div class="k">${sidLage && gruppSida(g) < 9999 ? `<span class="sidnr">${esc(sidEtikett(gruppSida(g)))}</span> · ` : ""}${esc(s.key)}${s.capo && s.capo!=="0" ? " · capo "+esc(s.capo) : ""}</div>
+    </li>`;}).join("");
+  ul.querySelectorAll("li").forEach(li => li.addEventListener("click", () => {
+    returnScroll.list = window.scrollY; showSong(+li.dataset.i);
+  }));
+  ul.querySelectorAll(".addbtn").forEach(b => b.addEventListener("click", e => {
+    e.stopPropagation();
+    toggleSetlist(b.dataset.slug);
+    const on = inSet(b.dataset.slug);
+    b.classList.toggle("in", on); b.textContent = on ? "✓" : "+";
+    b.setAttribute("aria-pressed", on);
+  }));
+}
+function renderRail(){
+  const letters = ["#","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P",
+                   "Q","R","S","T","U","V","W","X","Y","Z","Å","Ä","Ö"];
+  const rail = document.getElementById("rail");
+  rail.innerHTML = letters.map(L =>
+    `<span class="${INITIALS.has(L)?"":"dim"}" data-l="${L}">${L==="#"?"0":L}</span>`).join("");
+  rail.querySelectorAll("span:not(.dim)").forEach(el => el.onclick = () => {
+    const li = document.querySelector(`.songlist li[data-init="${el.dataset.l}"]`);
+    if(li) li.scrollIntoView({block:"start"});
+  });
+}
+
+/* ---------- artistregister ---------- */
+function showArtists(){
+  stopScroll();
+  document.title = "Artister – Sångbok Gitarr";
+  let html = `
+    <header class="top">
+      <div class="crumb">
+        <button id="home" aria-label="Till pärmen">&#8962;</button>
+        <span class="ctx">Artister <span class="count">${ARTISTS.length}</span></span>
+      </div>
+    </header><div class="artreg">`;
+  let cur = "";
+  for(const a of ARTISTS){
+    const L = initial(a);
+    if(L !== cur){ cur = L; html += `<div class="artletter">${esc(L==="#"?"0–9":L)}</div>`; }
+    html += `<div class="artrow" data-a="${esc(a)}"><span class="an">${esc(a)}</span>`
+          + `<span class="ac">${ARTCOUNT[a]}</span></div>`;
+  }
+  html += `</div>`;
+  app.innerHTML = html;
+  document.getElementById("home").onclick = showCover;
+  document.querySelectorAll(".artrow").forEach(el => el.onclick = () => {
+    clearFilters(); fArtist = el.dataset.a; store.set("fartist", fArtist); showList();
+  });
+  window.scrollTo(0,0);
+}
+
+/* ---------- säkerhetskopiering ---------- */
+function showBackup(){
+  stopScroll();
+  document.title = "Säkerhetskopiera – Sångbok Gitarr";
+  app.innerHTML = `
+    <header class="top">
+      <div class="crumb">
+        <button id="home" aria-label="Till pärmen">&#8962;</button>
+        <span class="ctx">Säkerhetskopiera</span>
+      </div>
+    </header>
+    <div class="backup">
+      <p class="dimtext">Favoriter, kvällens listor, arkivmarkeringar, transponeringar,
+      capo och versionsval sparas bara i den här webbläsaren. Kopiera ut dem här och
+      klistra in på en ny telefon — eller som backup.</p>
+      <button class="chipbtn" id="bkexport">Kopiera säkerhetskopia</button>
+      <p class="dimtext" style="margin-top:22px">Återställ: klistra in en kopia nedan.</p>
+      <textarea id="bkfield" rows="5" placeholder="Klistra in säkerhetskopian här…"></textarea>
+      <button class="chipbtn" id="bkimport">Läs in säkerhetskopian</button>
+      <p class="dimtext" id="bkstatus"></p>
+    </div>`;
+  document.getElementById("home").onclick = showCover;
+  document.getElementById("bkexport").onclick = async () => {
+    const data = {};
+    for(let i = 0; i < localStorage.length; i++){
+      const k = localStorage.key(i);
+      if(k && k.startsWith("gb:")) data[k] = localStorage.getItem(k);
+    }
+    const json = JSON.stringify({app: "sangbok", datum: new Date().toISOString().slice(0,10), data});
+    try { await navigator.clipboard.writeText(json);
+          document.getElementById("bkstatus").textContent = "Kopierad till urklipp ✓ (" + Object.keys(data).length + " poster)"; }
+    catch(e){ document.getElementById("bkfield").value = json;
+              document.getElementById("bkstatus").textContent = "Kunde inte nå urklipp — kopiera texten ur fältet ovan."; }
+  };
+  document.getElementById("bkimport").onclick = () => {
+    const st = document.getElementById("bkstatus");
+    try {
+      const obj = JSON.parse(document.getElementById("bkfield").value.trim());
+      if(!obj || obj.app !== "sangbok" || !obj.data) throw new Error("fel format");
+      let n = 0;
+      for(const [k, v] of Object.entries(obj.data)){
+        if(k.startsWith("gb:")){ localStorage.setItem(k, v); n++; }
+      }
+      st.textContent = n + " poster inlästa ✓ — laddar om…";
+      setTimeout(() => location.reload(), 900);
+    } catch(e){ st.textContent = "Kunde inte läsa kopian — kontrollera att hela texten klistrades in."; }
+  };
+  window.scrollTo(0,0);
+}
+
+/* ---------- källregister ---------- */
+function showKallor(){
+  stopScroll();
+  document.title = "Källor – Sångbok Gitarr";
+  let html = `
+    <header class="top">
+      <div class="crumb">
+        <button id="home" aria-label="Till pärmen">&#8962;</button>
+        <span class="ctx">Källor <span class="count">${KALLREG.length}</span></span>
+      </div>
+    </header><div class="artreg">`;
+  for(const k of KALLREG){
+    html += `<div class="artrow" data-k="${esc(k)}"><span class="an">${esc(k)}</span>`
+          + `<span class="ac">${KALLCOUNT[k]}</span></div>`;
+  }
+  html += `</div>`;
+  app.innerHTML = html;
+  document.getElementById("home").onclick = showCover;
+  document.querySelectorAll(".artrow").forEach(el => el.onclick = () => {
+    clearFilters(); fKalla = el.dataset.k; store.set("fkalla", fKalla); showList();
+  });
+  window.scrollTo(0,0);
+}
+
+/* ---------- kvällens lista ---------- */
+function inSet(slug){ return setlist.includes(slug); }
+function toggleSetlist(slug){
+  const i = setlist.indexOf(slug);
+  i >= 0 ? setlist.splice(i,1) : setlist.push(slug);
+  store.set("setlist", setlist);
+}
+function gotoPos(p){
+  if(p < 0 || p >= setlist.length) return;
+  const i = SONGS.findIndex(s => s.slug === setlist[p]);
+  if(i >= 0) showSong(i, {set:true, pos:p});
+}
+function showSetlist(opt){
+  stopScroll(); closeSheet();
+  document.title = "Kvällens lista – Sångbok Gitarr";
+  const rows = setlist.map((sl,pos) => {
+    const i = SONGS.findIndex(s => s.slug === sl);
+    if(i < 0) return "";
+    const s = SONGS[i];
+    return `<li data-i="${i}" data-pos="${pos}">
+      <div class="settxt" tabindex="0" role="button">
+        <div class="t">${esc(s.title)}${(GRUPPER.get(s.grupp||s.slug)||[]).length>1?` <span class="mini vbadge">${esc(s.variantEtikett)}</span>`:""}</div><div class="a">${esc(s.artist)}</div>
+      </div>
+      <span class="setops">
+        <button class="setop" data-op="up" aria-label="Flytta upp"${pos===0?" disabled":""}>&#8593;</button>
+        <button class="setop" data-op="down" aria-label="Flytta ner"${pos===setlist.length-1?" disabled":""}>&#8595;</button>
+        <button class="setop" data-op="del" aria-label="Ta bort">&#10005;</button>
+      </span>
+    </li>`;
+  }).join("");
+  app.innerHTML = `
+    <header class="top">
+      <div class="crumb">
+        <button id="home" aria-label="Till pärmen">&#8962;</button>
+        <span class="ctx">Kvällens lista <span class="count">${setlist.length} låtar</span></span>
+      </div>
+    </header>
+    ${setlist.length ? `<ul class="songlist" id="setl">${rows}</ul>
+      <div class="setfoot"><button class="clearbtn" id="clearset">Rensa listan</button></div>`
+    : `<div class="empty">Inga låtar ännu — lägg till med + i listan.</div>`}`;
+  document.getElementById("home").onclick = showCover;
+  const cs = document.getElementById("clearset");
+  if(cs) cs.onclick = () => { setlist = []; store.set("setlist", setlist); showSetlist(); };
+  document.querySelectorAll("#setl li").forEach(li => {
+    const open = () => { returnScroll.set = window.scrollY; showSong(+li.dataset.i, {set:true, pos:+li.dataset.pos}); };
+    const tx = li.querySelector(".settxt");
+    tx.onclick = open;
+    tx.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); open(); } };
+    li.querySelectorAll(".setop").forEach(b => b.onclick = e => {
+      e.stopPropagation();
+      const p = +li.dataset.pos, op = b.dataset.op;
+      if(op === "del") setlist.splice(p,1);
+      else if(op === "up" && p > 0) [setlist[p-1],setlist[p]] = [setlist[p],setlist[p-1]];
+      else if(op === "down" && p < setlist.length-1) [setlist[p+1],setlist[p]] = [setlist[p],setlist[p+1]];
+      store.set("setlist", setlist); showSetlist();
+    });
+  });
+  window.scrollTo(0, opt && opt.restore ? returnScroll.set : 0);
+}
+
+/* ---------- låtvy ---------- */
+function renderSections(s, tr){
+  return s.sections.map(sec => {
+    if(sec.type === "tab") return `<pre class="tab">${esc(sec.lines.join("\n"))}</pre>`;
+    if(sec.type === "comment") return `<div class="section comment">${sec.lines.map(esc).join("<br>")}</div>`;
+    return `<div class="section ${sec.type}">` + sec.lines.map(line => {
+      // Ren ackordrad (intro, mellanspel): ingen s\u00E5ngtext under ackorden.
+      // Ackordnamnet \u00E4r display:block i ett inline-block-segment, s\u00E5 segmentets
+      // bredd blir ackordets bredd \u2014 st\u00E5r det bara 1\u20132 mellanslag under blir
+      // gapet noll och "[G] [Gsus4]" renderas som "GGsus4". Klassen ger dem
+      // ett garanterat mellanrum. (Uppt\u00E4ckt 2026-07-26 efter ackordgenomg\u00E5ngen,
+      // som gjorde hundratals s\u00E5dana rader till riktiga ackord.)
+      const barAckord = line.length && line.some(([c]) => c) && line.every(([,t]) => !t.trim());
+      return `<div class="line${barAckord ? " ackordrad" : ""}">` + line.map(([c,t]) =>
+        `<span class="seg${c?" hasch":""}">${c?`<span class="chord">${esc(trans(c,tr))}</span>`:""}<span>${esc(t) || (c ? "\u00A0" : "")}</span></span>`
+      ).join("") + `</div>`;
+    }).join("") + `</div>`;
+  }).join("");
+}
+function showSong(i, ctx){
+  const s = SONGS[i];
+  let tr = store.get("tr:"+s.slug, 0);
+  const iSet = !!(ctx && ctx.set);
+  document.title = s.title + " – Sångbok Gitarr";
+  /* Huvudet: strukturerad information radvis, taggar i följd, bokföring aldrig.
+     Tidigare låg artist, tonart, nivå och taggar klumpade på en rad med · mellan,
+     nivån stod oöversatt ("easy"), och interna anteckningar om nedteckningen
+     syntes i appen. Omgjort 2026-07-26 på Simons begäran. */
+  const NIVA = {easy:"Lätt", medium:"Medel", hard:"Svår"};
+  const musikrad = [s.key && "Tonart "+s.key,
+                    s.capo && s.capo!=="0" && "Capo "+s.capo,
+                    NIVA[s.difficulty] || s.difficulty].filter(Boolean).join(" · ");
+  /* I 18 filer innehåller {artist} en hel kredit ("Musik: J.S. Bach, Text: …")
+     i stället för ett namn. Under rubriken ARTIST blir det fel och dessutom
+     dubblerat mot krediten. Är fältet en kredit visas det som sådan, och
+     artistraden utgår. Datan rörs inte — artistfacetten filtrerar som förut. */
+  const artistArKredit = /(^|[\s(])(text|musik|mus\.|arr\.)\s*[:&]/i.test(s.artist||"")
+                      || /\/|\(svensk|\(eng/i.test(s.artist||"");
+  /* Artist och kredit säger ofta samma sak, kreditraden bara utförligare
+     ("Sholom Secunda / Christer Cervin (svensk text)" mot "Sholom Secunda …
+     Svensk text: Christer Cervin"). Nämns artistens namn i krediten visas bara
+     krediten — annars står samma sak två gånger. */
+  const nyckelnamn = (s.artist||"").split(/[\/,(]/)[0].trim().toLowerCase();
+  const kreditTackerArtist = !!(s.upphov && nyckelnamn.length > 2
+                                && s.upphov.toLowerCase().includes(nyckelnamn));
+  const visaArtist = !!s.artist && !artistArKredit && !kreditTackerArtist;
+  const kredit = artistArKredit && !s.upphov ? s.artist : s.upphov;
+  const visaUpphov = !!kredit && (visaArtist ? kredit.toLowerCase() !== (s.artist||"").toLowerCase() : true);
+  const kalltext = (s.kallor||[]).map((k,kx) =>
+        (kx===0 && s.kallaUrl)
+          ? `<a href="${esc(s.kallaUrl)}" class="kallalank" target="_blank" rel="noopener">${esc(k)} ↗</a>`
+          : esc(k)).join(" · ") + (s.sida ? ` <span class="dimtext">s.&nbsp;${s.sida>200?s.sida-200:s.sida}</span>` : "");
+  const setNav = iSet ? `<span class="grp"><button id="prev" aria-label="Föregående i listan"${ctx.pos<=0?" disabled":""}>&#8249;</button><span class="setpos">${ctx.pos+1}/${setlist.length}</span><button id="next" aria-label="Nästa i listan"${ctx.pos>=setlist.length-1?" disabled":""}>&#8250;</button></span>` : "";
+  app.innerHTML = `
+    <header class="toolbar">
+      <button id="back">&#8592;</button>
+      ${setNav}
+      <span class="grp"><button id="down">&#9837;</button><span class="keylbl" id="key"></span><button id="up">&#9839;</button></span>
+      <span class="grp"><button id="smaller">A&#8722;</button><button id="bigger">A+</button></span>
+      <button id="favbtn" class="addbtn${favs.has(s.slug)?" in":""}" aria-pressed="${favs.has(s.slug)}" aria-label="Favorit">${favs.has(s.slug)?"★":"☆"}</button>
+      <button id="addset" class="addbtn${inSet(s.slug)?" in":""}" aria-pressed="${inSet(s.slug)}" aria-label="Kvällens lista">${inSet(s.slug)?"✓":"+"}</button>
+      <span class="spacer"></span>
+      <span class="grp"><button id="play">&#9654;</button><input id="speed" type="range" min="8" max="90" value="${speed}"></span>
+    </header>
+    <main class="song" style="--fs:${fontSize}rem">
+      <h2>${esc(s.title)}</h2>
+      ${(GRUPPER.get(s.grupp||s.slug)||[]).length>1?`<div class="varvaxel">${GRUPPER.get(s.grupp||s.slug).map(vi =>
+        `<span class="chipbtn vv${vi===i?" on":""}" data-vi="${vi}" role="button">${esc(SONGS[vi].variantEtikett)}</span>`).join("")}</div>`:""}
+      <dl class="fakta">
+        ${visaArtist?`<dt>Artist</dt><dd>${esc(s.artist)}</dd>`:""}
+        ${visaUpphov?`<dt>Text &amp; musik</dt><dd>${esc(kredit)}</dd>`:""}
+        ${musikrad?`<dt>Spelas</dt><dd>${esc(musikrad)}</dd>`:""}
+        ${(s.kallor&&s.kallor.length)?`<dt>Källa</dt><dd>${kalltext}</dd>`:""}
+      </dl>
+      ${s.tags.length?`<p class="taggrad">${s.tags.map(esc).join(" · ")}</p>`:""}
+      ${s.comments.map(c=>`<p class="headcomment">${esc(c)}</p>`).join("")}
+      <div class="body" id="body"></div>
+      <div class="arkrad">${s.arkiverad
+        ? `<span class="arknot">Arkiverad — filen ligger i arkivmappen</span>`
+        : `<button class="clearbtn" id="arkbtn">${arkiv.has(s.slug)?"Återställ från arkivet":"Arkivera låten (göms ur vyerna)"}</button>`}</div>
+    </main>`;
+  const body = document.getElementById("body");
+  const keyEl = document.getElementById("key");
+  function renderBody(){
+    keyEl.textContent = (s.key ? trans(s.key, tr) : "–") + (tr ? ` (${tr>0?"+":""}${tr})` : "");
+    body.innerHTML = renderSections(s, tr);
+  }
+  renderBody();
+  document.getElementById("back").onclick = () => { iSet ? showSetlist({restore:true}) : showList({restore:true}); };
+  document.getElementById("up").onclick   = () => { tr=(tr+1)%12;  store.set("tr:"+s.slug,tr); renderBody(); };
+  document.getElementById("down").onclick = () => { tr=(tr+11)%12; store.set("tr:"+s.slug,tr); renderBody(); };
+  document.getElementById("bigger").onclick  = () => setFont(+0.08);
+  document.getElementById("smaller").onclick = () => setFont(-0.08);
+  document.getElementById("speed").oninput = e => { speed=+e.target.value; store.set("speed",speed); };
+  document.getElementById("play").onclick = toggleScroll;
+  const kl = document.querySelector(".kallalank");
+  if(kl) kl.onclick = e => { e.preventDefault(); window.open(kl.href, "_blank"); };
+  document.querySelectorAll(".vv").forEach(el => el.onclick = () => {
+    const vi = +el.dataset.vi;
+    if(vi === i) return;
+    store.set("var:"+(s.grupp||s.slug), SONGS[vi].slug);
+    showSong(vi, ctx);
+  });
+  const fb = document.getElementById("favbtn");
+  fb.onclick = () => {
+    favs.has(s.slug) ? favs.delete(s.slug) : favs.add(s.slug);
+    store.set("favs", [...favs]);
+    const on = favs.has(s.slug);
+    fb.classList.toggle("in", on); fb.textContent = on ? "★" : "☆"; fb.setAttribute("aria-pressed", on);
+  };
+  const akb = document.getElementById("arkbtn");
+  if(akb) akb.onclick = () => {
+    arkiv.has(s.slug) ? arkiv.delete(s.slug) : arkiv.add(s.slug);
+    store.set("arkiv", [...arkiv]);
+    akb.textContent = arkiv.has(s.slug) ? "Återställ från arkivet" : "Arkivera låten (göms ur vyerna)";
+  };
+  const ab = document.getElementById("addset");
+  ab.onclick = () => {
+    toggleSetlist(s.slug);
+    const on = inSet(s.slug);
+    ab.classList.toggle("in", on); ab.textContent = on ? "✓" : "+";
+    ab.setAttribute("aria-pressed", on);
+  };
+  if(iSet){
+    document.getElementById("prev").onclick = () => gotoPos(ctx.pos - 1);
+    document.getElementById("next").onclick = () => gotoPos(ctx.pos + 1);
+    // svepnavigering inom kvällens lista
+    let sx = 0, sy = 0;
+    const main = document.querySelector(".song");
+    main.addEventListener("touchstart", e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
+    main.addEventListener("touchend", e => {
+      const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      if(Math.abs(dx) > 70 && Math.abs(dx) > 2*Math.abs(dy)) gotoPos(ctx.pos + (dx < 0 ? 1 : -1));
+    }, {passive:true});
+  }
+  window.scrollTo(0,0);
+}
+function setFont(d){
+  fontSize = Math.min(1.6, Math.max(0.7, +(fontSize+d).toFixed(2)));
+  store.set("fs", fontSize);
+  const m = document.querySelector(".song");
+  if(m) m.style.setProperty("--fs", fontSize+"rem");
+}
+
+/* ---------- autoscroll ---------- */
+function toggleScroll(){ scrolling ? stopScroll() : startScroll(); }
+function startScroll(){
+  scrolling = true; lastT = null;
+  const b = document.getElementById("play"); if(b) b.innerHTML = "&#10074;&#10074;";
+  if(navigator.wakeLock) navigator.wakeLock.request("screen").then(w => wakeLock = w).catch(()=>{});
+  requestAnimationFrame(step);
+}
+function stopScroll(){
+  scrolling = false; lastT = null;
+  const b = document.getElementById("play"); if(b) b.innerHTML = "&#9654;";
+  if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock = null; }
+}
+function step(t){
+  if(!scrolling) return;
+  if(lastT !== null){
+    acc += (t-lastT)/1000*speed;
+    if(acc >= 1){ const px = Math.floor(acc); acc -= px; window.scrollBy(0, px); }
+    if(window.innerHeight + window.scrollY >= document.body.scrollHeight - 2) stopScroll();
+  }
+  lastT = t;
+  requestAnimationFrame(step);
+}
+
+/* ---------- ackorddiagram ---------- */
+/* Format: sex tecken för strängarna EADGBe; x=dämpad, 0=lös, siffra=band (absolut).
+   Renderaren flyttar fönstret ("Nfr") när högsta bandet inte ryms vid sadeln. */
+const SHAPES = {
+  // dur
+  "C":"x32010","C#":"x46664","D":"xx0232","D#":"x68886","E":"022100","F":"133211",
+  "F#":"244322","G":"320003","G#":"466544","A":"x02220","A#":"x13331","B":"x24442",
+  // moll
+  "Cm":"x35543","C#m":"x46654","Dm":"xx0231","D#m":"x68876","Em":"022000","Fm":"133111",
+  "F#m":"244222","Gm":"355333","G#m":"466444","Am":"x02210","A#m":"x13321","Bm":"x24432",
+  // dominantsjuor
+  "C7":"x32310","C#7":"x46464","D7":"xx0212","D#7":"x68686","E7":"020100","F7":"131211",
+  "F#7":"242322","G7":"320001","G#7":"464544","A7":"x02020","A#7":"x13131","B7":"x21202",
+  // mollsjuor
+  "Cm7":"x35343","C#m7":"x46454","Dm7":"xx0211","D#m7":"x68676","Em7":"022030","Fm7":"131111",
+  "F#m7":"242222","Gm7":"353333","G#m7":"464444","Am7":"x02010","A#m7":"x13121","Bm7":"x24232",
+  // maj7
+  "Cmaj7":"x32000","C#maj7":"x46564","Dmaj7":"xx0222","D#maj7":"x68786","Emaj7":"021100",
+  "Fmaj7":"xx3210","Gmaj7":"320002","Amaj7":"x02120","A#maj7":"x13231","Bmaj7":"x24342",
+  // sus & add
+  "Csus4":"x33011","Dsus4":"xx0233","Esus4":"022200","Fsus4":"133311","Gsus4":"3x0013",
+  "Asus4":"x02230","Bsus4":"x24452",
+  "Csus2":"x30033","Dsus2":"xx0230","Gsus2":"3x0233","Asus2":"x02200","Bsus2":"x24422",
+  "Cadd9":"x32030"
+};
+function chordShape(name){
+  const raw = String(name).split("/")[0].trim();     // släng basnot (C/G → C)
+  const m = raw.match(/^([A-H][#b]?)(.*)$/);
+  if(!m) return null;
+  const root = ALIAS[m[1]] || m[1];
+  const q = m[2];
+  const cand = [q];
+  if(/^m(?!aj)/.test(q)) cand.push("m7","m");        // mollfamiljen
+  else if(/^(maj|add|sus|6)/.test(q)) cand.push(""); // färgningar → ren dur
+  else if(/^(7|9|11|13)/.test(q)) cand.push("7","");  // septimfamiljen
+  for(const c of cand){ if(SHAPES[root+c]) return SHAPES[root+c]; }
+  return null;
+}
+function chordSVG(shape){
+  const f = [...shape].map(c => c === "x" ? -1 : +c);
+  const fr = f.filter(v => v > 0);
+  const base = (fr.length && Math.max(...fr) > 4) ? Math.min(...fr) : 1;
+  const x0 = 30, y0 = 24, sw = 14, fh = 22;
+  let g = "";
+  for(let r = 0; r <= 4; r++)   // band (översta = sadel vid läge 1)
+    g += `<line x1="${x0}" y1="${y0+r*fh}" x2="${x0+5*sw}" y2="${y0+r*fh}" stroke="currentColor" stroke-width="${r===0&&base===1?3:1}"/>`;
+  for(let i = 0; i < 6; i++)    // strängar
+    g += `<line x1="${x0+i*sw}" y1="${y0}" x2="${x0+i*sw}" y2="${y0+4*fh}" stroke="currentColor" stroke-width="1"/>`;
+  if(base > 1)
+    g += `<text x="${x0-6}" y="${y0+fh*0.5+4}" text-anchor="end" font-size="11" fill="currentColor">${base}fr</text>`;
+  f.forEach((v,i) => {
+    const x = x0 + i*sw;
+    if(v === -1)     g += `<text x="${x}" y="${y0-6}" text-anchor="middle" font-size="10" fill="currentColor">×</text>`;
+    else if(v === 0) g += `<circle cx="${x}" cy="${y0-9}" r="3.2" fill="none" stroke="currentColor"/>`;
+    else             g += `<circle cx="${x}" cy="${y0+(v-base)*fh+fh/2}" r="5" fill="currentColor"/>`;
+  });
+  return `<svg width="110" height="130" viewBox="0 0 124 128" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${g}</svg>`;
+}
+const sheetEl = document.getElementById("sheet");
+function openSheet(name){
+  const shape = chordShape(name);
+  sheetEl.innerHTML = `<span class="shname">${esc(name)}</span>`
+    + (shape ? chordSVG(shape) : `<span class="shnone">inget diagram</span>`);
+  sheetEl.hidden = false;
+}
+function closeSheet(){ sheetEl.hidden = true; }
+document.addEventListener("click", e => {
+  if(!(e.target instanceof Element)) return;
+  if(sheetEl.contains(e.target)){ closeSheet(); return; }
+  const seg = e.target.closest("#app .seg");
+  const ch = seg && seg.querySelector(".chord");
+  if(ch) openSheet(ch.textContent);
+  else if(!sheetEl.hidden) closeSheet();
+});
+
+/* ---------- utskrift ---------- */
+function printBook(list, titel){
+  const pr = document.getElementById("printroot");
+  const datum = new Date().toLocaleDateString("sv-SE");
+  pr.innerHTML = `
+    <div class="ptitle"><h1>${esc(titel)}</h1><p>${list.length} låtar · ${datum}</p></div>
+    <div class="pregister"><h2>Register</h2><ol>${
+      list.map(s => `<li>${esc(s.title)} — ${esc(s.artist)}</li>`).join("")
+    }</ol></div>`
+    + list.map(s => {
+      const tr = store.get("tr:"+s.slug, 0);
+      const meta = [s.artist, s.key && "Tonart "+trans(s.key, tr),
+                    s.capo && s.capo!=="0" && "capo "+s.capo].filter(Boolean).join(" · ");
+      return `<section class="psong"><h2>${esc(s.title)}</h2><p class="pmeta">${esc(meta)}</p>${renderSections(s, tr)}</section>`;
+    }).join("");
+  requestAnimationFrame(() => window.print());
+}
+window.addEventListener("afterprint", () => { document.getElementById("printroot").innerHTML = ""; });
+
+showCover();
+
+// ---- Håll skärmen vaken (Wake Lock) ----
+// Skärmen ska inte slockna mitt i en låt. Låset gäller bara medan appen är
+// synlig (webbläsaren släpper det när fliken/appen göms) och återtas
+// automatiskt när man kommer tillbaka. Kräver iOS 16.4+/Chrome; äldre
+// webbläsare ignorerar tyst.
+(function(){
+  if (!("wakeLock" in navigator)) return;
+  let lock = null;
+  async function ta(){
+    try {
+      if (lock || document.visibilityState !== "visible") return;
+      lock = await navigator.wakeLock.request("screen");
+      lock.addEventListener("release", () => { lock = null; });
+    } catch (e) { /* nekad (t.ex. energisparläge) — försök igen vid nästa tryck */ }
+  }
+  document.addEventListener("visibilitychange", ta);
+  window.addEventListener("pointerdown", ta, {passive: true});
+  ta();
+})();
+</script>
+<script>
+/* ===== SKALLÄGE — publicerbart, innehåller noll sångtexter =====
+   Datan bor i Dropbox App Folder och läses efter inloggning (PKCE).
+   Mönstret följer Sångbok KTH / Pizzaindex, validerade i drift. */
+(function(){
+const APP_KEY='xcqghqe18prs8i1';
+const APP='sangbok';                 /* nyckel i manifestet: sangbok | gitarren */
+const TITEL='Sångbok Gitarr';
+const TOKEN_KEY='sangbokgitarr.tok';   /* delas av båda skalen — en inloggning räcker */
+const PKCE_KEY='sangbokgitarr.pkce';
+const b64url=buf=>btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+
+function saknadeFormagor(){const miss=[];
+ if(!window.isSecureContext)miss.push('Sidan körs inte i säker kontext. Använd https eller http://localhost.');
+ if(!(window.crypto&&crypto.subtle))miss.push('crypto.subtle saknas, så PKCE går inte att göra.');
+ try{sessionStorage.setItem('_p','1');sessionStorage.removeItem('_p')}catch(e){miss.push('sessionStorage är blockerat.')}
+ return miss}
+
+/* nyckel/värde i IndexedDB — egen databas per app så de inte krockar */
+const DBK={_p:null,
+ open(){return this._p||(this._p=new Promise(res=>{let klar=false;
+  const ge=db=>{if(klar)return;klar=true;clearTimeout(t);res(db)};
+  const t=setTimeout(()=>ge(null),4000);let q;
+  try{q=indexedDB.open('sangbokgitarr-'+APP,1)}catch(e){return ge(null)}
+  q.onupgradeneeded=()=>{if(!q.result.objectStoreNames.contains('kv'))q.result.createObjectStore('kv')};
+  q.onsuccess=()=>ge(q.result);q.onerror=()=>ge(null);q.onblocked=()=>ge(null)}))},
+ async get(k){const db=await this.open();if(!db)return undefined;
+  return new Promise(res=>{try{const tx=db.transaction('kv','readonly');const r=tx.objectStore('kv').get(k);
+   let ut;r.onsuccess=()=>{ut=r.result};tx.oncomplete=()=>res(ut);tx.onerror=()=>res(undefined)}catch(e){res(undefined)}})},
+ async put(k,v){const db=await this.open();if(!db)return;
+  return new Promise(res=>{try{const tx=db.transaction('kv','readwrite');tx.objectStore('kv').put(v,k);
+   tx.oncomplete=()=>res();tx.onerror=()=>res()}catch(e){res()}})}};
+
+const Auth={token:null,
+ /* Uppdateringsnyckeln ligger i IndexedDB, inte sessionStorage. Utan den kunde
+    appen aldrig uppdatera sig själv: token försvann när appen stängdes, och
+    starten ur cachen hoppade över manifestkollen. Rättat 2026-07-25. */
+ async fornya(){const rt=await DBK.get('refresh');if(!rt)return null;
+  try{const r=await fetch('https://api.dropboxapi.com/oauth2/token',{method:'POST',
+   headers:{'Content-Type':'application/x-www-form-urlencoded'},
+   body:new URLSearchParams({grant_type:'refresh_token',refresh_token:rt,client_id:APP_KEY})});
+  if(!r.ok){if(r.status===400)await DBK.put('refresh',null);return null}
+  const t=await r.json();this.token=t.access_token;
+  sessionStorage.setItem(TOKEN_KEY,JSON.stringify({access_token:t.access_token,
+   expires:Date.now()+(t.expires_in?t.expires_in*1000:14400000)}));
+  return this.token}catch(e){return null}},
+ /* index.html normaliseras bort: annars blir redirect_uri en annan sträng än den
+    som registrerats i Dropbox App Console och inloggningen nekas. gitarren.html
+    påverkas inte av mönstret och behåller sin egen adress. */
+ redirectUri(){return location.origin+location.pathname.replace(/index\.html$/,'')},
+ load(){try{const rad=sessionStorage.getItem(TOKEN_KEY);if(!rad)return null;const t=JSON.parse(rad);
+  if(t.expires&&Date.now()>t.expires-60000){sessionStorage.removeItem(TOKEN_KEY);return null}
+  this.token=t.access_token;return this.token}catch(e){return null}},
+ async begin(){if(APP_KEY.indexOf('__')===0)throw new Error('App-nyckeln är inte ifylld i bygget — kör build_shell.py med nyckeln.');
+  const verifier=b64url(crypto.getRandomValues(new Uint8Array(64)));
+  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier));
+  const state=b64url(crypto.getRandomValues(new Uint8Array(16)));
+  sessionStorage.setItem(PKCE_KEY,JSON.stringify({verifier,state,at:Date.now()}));
+  const u=new URL('https://www.dropbox.com/oauth2/authorize');
+  u.searchParams.set('client_id',APP_KEY);u.searchParams.set('response_type','code');
+  u.searchParams.set('code_challenge',b64url(digest));u.searchParams.set('code_challenge_method','S256');
+  u.searchParams.set('redirect_uri',this.redirectUri());u.searchParams.set('state',state);
+  u.searchParams.set('token_access_type','offline');location.assign(u.toString())},
+ async complete(){const p=new URLSearchParams(location.search);const code=p.get('code');
+  if(!code)return this.load();
+  let sparat=null;try{sparat=JSON.parse(sessionStorage.getItem(PKCE_KEY)||'null')}catch(e){}
+  sessionStorage.removeItem(PKCE_KEY);history.replaceState({},'',this.redirectUri());
+  if(!sparat)throw new Error('Inloggningen saknar sitt lokala underlag — försök igen.');
+  if(Date.now()-sparat.at>600000)throw new Error('Inloggningsförsöket är för gammalt — försök igen.');
+  if(sparat.state!==p.get('state'))throw new Error('state matchar inte — avbryter.');
+  const body=new URLSearchParams({code,grant_type:'authorization_code',client_id:APP_KEY,
+   code_verifier:sparat.verifier,redirect_uri:this.redirectUri()});
+  const r=await fetch('https://api.dropboxapi.com/oauth2/token',{method:'POST',
+   headers:{'Content-Type':'application/x-www-form-urlencoded'},body});
+  if(!r.ok)throw new Error('Dropbox nekade inloggningen ('+r.status+')');
+  const t=await r.json();this.token=t.access_token;
+  if(t.refresh_token)await DBK.put('refresh',t.refresh_token);
+  sessionStorage.setItem(TOKEN_KEY,JSON.stringify({access_token:t.access_token,
+   expires:Date.now()+(t.expires_in?t.expires_in*1000:14400000)}));
+  return this.token}};
+
+async function dbxJSON(sokvag){
+ const r=await fetch('https://content.dropboxapi.com/2/files/download',{method:'POST',
+  headers:{Authorization:'Bearer '+Auth.token,'Dropbox-API-Arg':JSON.stringify({path:sokvag})}});
+ if(r.status===401){sessionStorage.removeItem(TOKEN_KEY);Auth.token=null;throw new Error('Sessionen gick ut — logga in igen.')}
+ if(!r.ok){const txt=await r.text();
+  if(/missing_scope|required scope/i.test(txt))throw new Error('Appen saknar behörigheten files.content.read — kryssa i den under Permissions i Dropbox App Console och logga in igen.');
+  if(/not_found/.test(txt))throw new Error('Låtdatan ligger inte i Dropbox-mappen än. Kör <code>scripts/sync_payload.sh</code> på datorn, vänta tills Dropbox synkat klart, och ladda om.');
+  throw new Error('Dropbox '+r.status+': '+txt.slice(0,120))}
+ return r.json()}
+
+/* ---- inloggningsvyn ---- */
+const stil=document.createElement('style');
+stil.textContent='#skal{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;'+
+ 'justify-content:center;background:#f2efe6;color:#2c2c28;font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:24px}'+
+ '#skal .ruta{max-width:22em;text-align:center}'+
+ '#skal h1{font-size:1.5rem;margin:0 0 .6em;font-weight:600}'+
+ '#skal p{margin:0 0 1.2em;opacity:.85}'+
+ '#skal .fel{color:#c0392b;display:block;margin-bottom:.8em}'+
+ '#skal button{font:inherit;padding:.7em 1.4em;border-radius:8px;border:0;cursor:pointer;'+
+ 'background:#42594a;color:#fff}';
+document.head.appendChild(stil);
+const skalEl=document.createElement('div');skalEl.id='skal';
+skalEl.innerHTML='<div class="ruta"><h1>'+TITEL+'</h1><p id="skalmedd">Startar…</p><div id="skalknappar"></div></div>';
+function visaSkal(){if(!skalEl.isConnected)document.body.appendChild(skalEl)}
+function skalStatus(medd,knapp){visaSkal();
+ document.getElementById('skalmedd').innerHTML=medd;
+ const k=document.getElementById('skalknappar');k.innerHTML='';
+ if(knapp){const b=document.createElement('button');b.textContent=knapp.text;b.onclick=knapp.fn;k.appendChild(b)}}
+
+/* ---- start: injicera läsarkoden med datan på plats ---- */
+function starta(data){
+ window.__DATA__=data.songs;
+ const s=document.createElement('script');
+ s.textContent=document.getElementById('appkod').textContent;
+ document.body.appendChild(s);
+ if(skalEl.isConnected)skalEl.remove()}
+
+/* ===== SYNK AV APPENS TILLSTÅND =====
+   Favoriter, kvällens lista, arkiv, variantval och transponeringar ligger i
+   localStorage under "gb:". De följde inte med mellan enheter och försvann om
+   webbläsaren rensades. Nu speglas de i Dropbox App Folder.
+
+   Modell: EN fil, /state/appstate.json, med en hybrid logisk klocka per nyckel.
+   Senaste skrivningen vinner, nyckel för nyckel. Skrivning sker med
+   mode=update+rev — krockar ger 409, då hämtas om och slås ihop innan nytt
+   försök. Ingen mapplistning behövs, alltså inget files.metadata.read.
+
+   Textstorleken (gb:fs) synkas AVSIKTLIGT inte — den hör till skärmen man
+   sitter vid, inte till samlingen. */
+const SATT = Storage.prototype.setItem;   /* omodifierad setItem, för sammanslagning */
+const EJ_SYNK = new Set(['gb:fs']);
+/* Sångboken sparar under "gb:", Gitarren under "gitarren-v1". Båda ligger på
+   samma origin och delar därför localStorage OCH tillståndsfilen — en fil för
+   hela sajten. Utan "gitarren-v1" i listan synkades Gitarrens favoriter och
+   senast spelade låt aldrig, fast koden fanns i dess skal. */
+const SYNK_PREFIX = ['gb:', 'gitarren-v1'];
+const synkbar = k => !!k && !EJ_SYNK.has(k) && SYNK_PREFIX.some(p => k.startsWith(p));
+const Synk={fil:'/state/appstate.json',rev:null,_t:0,_n:0,timer:null,pa:false,
+ enhet(){let d=localStorage.getItem('sangbokgitarr.enhet');
+  if(!d){d=Math.random().toString(36).slice(2,10);SATT.call(localStorage,'sangbokgitarr.enhet',d)}return d},
+ nyHlc(){const t=Date.now();this._n=(this._t===t)?this._n+1:0;this._t=t;
+  return String(t).padStart(15,'0')+'-'+String(this._n).padStart(6,'0')+'-'+this.enhet()},
+ klockor(){try{return JSON.parse(localStorage.getItem('sangbokgitarr.hlc')||'{}')}catch(e){return{}}},
+ sparaKlockor(h){SATT.call(localStorage,'sangbokgitarr.hlc',JSON.stringify(h))},
+ nycklar(){const ut=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);
+  if(synkbar(k))ut.push(k)}return ut},
+
+ /* Hämtar fjärrtillståndet och slår ihop det med det lokala. Nyare klocka vinner. */
+ async hamta(){
+  if(!Auth.token)return false;
+  const r=await fetch('https://content.dropboxapi.com/2/files/download',{method:'POST',
+   headers:{Authorization:'Bearer '+Auth.token,'Dropbox-API-Arg':JSON.stringify({path:this.fil})}});
+  if(r.status===409||r.status===404)return true;          /* finns inte än — första gången */
+  if(!r.ok)return false;
+  try{this.rev=JSON.parse(r.headers.get('Dropbox-API-Result')||'{}').rev||null}catch(e){}
+  const fjarr=await r.json();
+  const h=this.klockor();let n=0;
+  for(const [k,post] of Object.entries(fjarr.poster||{})){
+   if(!synkbar(k))continue;
+   if(h[k]&&!(post.hlc>h[k]))continue;
+   if(post.varde===null)localStorage.removeItem(k);else SATT.call(localStorage,k,post.varde);
+   h[k]=post.hlc;n++}
+  this.sparaKlockor(h);
+  return true},
+
+ /* Skriver hela tillståndet. Vid krock: hämta om, slå ihop, försök igen. */
+ async skriv(forsok){
+  if(!Auth.token)return;
+  const h=this.klockor();
+  const poster={};
+  for(const k of this.nycklar()){
+   if(!h[k]){h[k]=this.nyHlc()}
+   poster[k]={varde:localStorage.getItem(k),hlc:h[k]}}
+  this.sparaKlockor(h);
+  const kropp=JSON.stringify({v:1,enhet:this.enhet(),poster});
+  const lage=this.rev?{'.tag':'update',update:this.rev}:'add';
+  const r=await fetch('https://content.dropboxapi.com/2/files/upload',{method:'POST',
+   headers:{Authorization:'Bearer '+Auth.token,'Content-Type':'application/octet-stream',
+    'Dropbox-API-Arg':JSON.stringify({path:this.fil,mode:lage,mute:true,autorename:false})},
+   body:kropp});
+  if(r.ok){try{this.rev=(await r.json()).rev||this.rev}catch(e){}return}
+  if(r.status===409&&(forsok||0)<3){                       /* någon annan enhet hann före */
+   await this.hamta();return this.skriv((forsok||0)+1)}
+  if(r.status===401){sessionStorage.removeItem(TOKEN_KEY);Auth.token=null}},
+
+ /* Fångar läsarens sparningar. mall.html vet ingenting om det här. */
+ bevaka(){
+  if(this.pa)return;this.pa=true;
+  const synk=this;
+  Storage.prototype.setItem=function(k,v){
+   SATT.call(this,k,v);
+   if(this===localStorage&&synkbar(k)){
+    const h=synk.klockor();h[k]=synk.nyHlc();synk.sparaKlockor(h);synk.snart()}};
+  const nu=()=>{if(synk.timer){clearTimeout(synk.timer);synk.timer=null;synk.skriv().catch(()=>{})}};
+  addEventListener('pagehide',nu);
+  addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')nu()})},
+ snart(){clearTimeout(this.timer);
+  this.timer=setTimeout(()=>this.skriv().catch(()=>{}),2500)}};
+
+/* Banner längst ner. Appen byts aldrig ut under fingrarna mitt i en låt —
+   Simon får välja när något ska hända. */
+function banner(text,fn,sekunder){
+ const gammal=document.getElementById('nyhet');if(gammal)gammal.remove();
+ const b=document.createElement('div');b.id='nyhet';
+ b.style.cssText='position:fixed;left:12px;right:12px;bottom:12px;z-index:99998;padding:.8em 1em;'+
+  'border-radius:10px;background:#42594a;color:#fff;font:15px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;'+
+  'box-shadow:0 4px 16px rgba(0,0,0,.25);cursor:pointer;text-align:center';
+ b.textContent=text;
+ b.onclick=()=>{b.remove();fn()};
+ document.body.appendChild(b);
+ if(sekunder)setTimeout(()=>b.remove(),sekunder*1000)}
+
+/* Hämtar manifestet och, om generationen skiljer sig, den nya payloaden.
+   Körs i bakgrunden efter att appen startat ur cachen. Tyst vid fel — utan
+   nät eller utan giltig nyckel ska appen bara fortsätta fungera. */
+async function kollaNytt(cachadGen){
+ try{
+  if(!Auth.token&&!await Auth.fornya())return;
+  const man=await dbxJSON('/data/manifest.json');
+  const post=man[APP];
+  if(!post||post.generation===cachadGen)return;
+  const data=await dbxJSON(post.path);
+  await DBK.put('payload',data);await DBK.put('generation',post.generation);
+  banner('Ny version av låtlistan hämtad — tryck för att ladda om',()=>location.reload(),25);
+ }catch(e){/* tyst: cachen duger */}}
+
+async function boot(){
+ /* dev-läge: payload från samma server, ingen inloggning */
+ if(location.hostname==='localhost'||location.hostname==='127.0.0.1'){
+  try{const r=await fetch('../payload/data/'+APP+'.json');
+   if(r.ok){Synk.bevaka();window.__synk=Synk;window.__auth=Auth;  /* localhost: testbänk */
+            return starta(await r.json())}}catch(e){}}
+ const cachadGen=await DBK.get('generation');const cachad=await DBK.get('payload');
+ let fel='';
+ try{await Auth.complete()}catch(e){fel=e.message}
+
+ /* ?logga-in i adressen tvingar fram inloggningsvyn även när cachen finns —
+    utvägen om något gått snett med nyckeln. */
+ const tvinga=new URLSearchParams(location.search).has('logga-in');
+
+ /* Finns cache: starta genast (snabbt, funkar offline) och leta ny data i
+    bakgrunden. Tidigare returnerade den här grenen direkt utan att kolla —
+    därför kunde appen aldrig få nya låtar utan att man loggade in på nytt.
+    OCH utan uppdateringsnyckel visades aldrig inloggningsknappen, så det gick
+    inte ens att skaffa en. Därför bannern nedan. */
+ if(cachad&&!fel&&!tvinga){
+  Synk.bevaka();                       /* måste ske FÖRE läsaren startar */
+  if(await DBK.get('refresh')||Auth.token){
+   if(!Auth.token)await Auth.fornya();
+   /* Hämta hem favoriter och listor innan läsaren läser localStorage — men
+      låt aldrig ett trögt nät hålla appen stängd. */
+   await Promise.race([Synk.hamta().catch(()=>{}),new Promise(r=>setTimeout(r,2000))]);
+   starta(cachad);kollaNytt(cachadGen)}
+  else{
+   starta(cachad);
+   banner('Logga in mot Dropbox för att hämta nya låtar',
+          ()=>Auth.begin().catch(e=>banner(e.message,()=>{},10)))}
+  return}
+
+ if(!Auth.token&&!await Auth.fornya()){
+  if(cachad)return starta(cachad);
+  const miss=saknadeFormagor();
+  if(miss.length)return skalStatus('<span class="fel">'+miss.join('<br>')+'</span>');
+  return skalStatus((fel?'<span class="fel">'+fel+'</span><br>':'')+
+   'Låtarna ligger i din Dropbox och hämtas efter inloggning.',
+   {text:'Logga in mot Dropbox',fn:()=>Auth.begin().catch(e=>skalStatus('<span class="fel">'+e.message+'</span>'))})}
+ try{
+  skalStatus('Hämtar låtlistan…');
+  const man=await dbxJSON('/data/manifest.json');
+  const post=man[APP];
+  if(!post)throw new Error('Manifestet saknar posten "'+APP+'" — kör om scripts/sync_payload.sh.');
+  if(cachad&&cachadGen===post.generation)return starta(cachad);
+  skalStatus('Hämtar låtarna…');
+  const data=await dbxJSON(post.path);
+  await DBK.put('payload',data);await DBK.put('generation',post.generation);
+  Synk.bevaka();
+  await Promise.race([Synk.hamta().catch(()=>{}),new Promise(r=>setTimeout(r,2000))]);
+  starta(data);
+ }catch(e){
+  if(cachad)return starta(cachad);
+  skalStatus('<span class="fel">'+e.message+'</span>')}}
+
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+</script>
+</body>
+</html>
