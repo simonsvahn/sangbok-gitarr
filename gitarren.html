@@ -410,16 +410,23 @@
   .app.eld .seg .c{text-shadow:0 0 10px rgba(255,140,50,.4)}
   .eldbar{
     position:fixed;top:14px;right:16px;z-index:30;
+    top:calc(14px + env(safe-area-inset-top, 0px));
+    right:max(16px, env(safe-area-inset-right, 0px));
     display:none;gap:8px;align-items:center;
   }
   .eldbar.on{display:flex}
   .eldtitle{
     position:fixed;top:16px;left:22px;z-index:30;display:none;
+    top:calc(16px + env(safe-area-inset-top, 0px));
+    left:max(22px, env(safe-area-inset-left, 0px));
     font-style:italic;color:var(--text-dim);font-size:.9rem;
     text-shadow:0 1px 6px rgba(0,0,0,.8);user-select:none;
   }
   .eldtitle.on{display:block}
   .eldtitle b{color:var(--flame);font-weight:600}
+  /* Lägerbålsknappen i mobilpanelen — låthuvudets knapp döljs på smala
+     skärmar, så mobilen behöver en egen väg in i eldläget. */
+  #eldBtnMobile{display:none}
 
   /* ================= tangentbordets scenläge ================= */
   .app.perform{grid-template-columns:1fr}
@@ -461,6 +468,7 @@
       font-size:clamp(1.05rem,5vw,1.35rem);
     }
     .songhead .artist,.songhead .chips,#performBtn,#eldBtn{display:none}
+    #eldBtnMobile{display:inline-block}
     .app.mobile-controls-open .songhead{flex-wrap:wrap}
     .app.mobile-controls-open .songhead .chips{
       display:flex;order:5;flex:1 0 100%;margin:0;
@@ -767,7 +775,7 @@
 
 <div class="app">
   <aside id="aside">
-    <div class="brand"><h1>Gitarren</h1><p>hela sångboken · spelbar · v2026-07-28c</p></div>
+    <div class="brand"><h1>Gitarren</h1><p>hela sångboken · spelbar · v2026-07-28d</p></div>
     <div class="search"><input id="q" type="search" placeholder="Sök låt, artist, tagg …" aria-label="Sök"></div>
     <div class="cats" id="cats"></div>
     <div class="count"><span id="count"></span><button class="cat" id="vlOpen">🎤 röstlogg</button></div>
@@ -863,6 +871,7 @@
             <button class="kbtn stop" id="audioBtn">🔇 starta ljud</button>
             <button class="kbtn" id="dampBtn" type="button">dämpa strängarna</button>
             <button class="kbtn" id="mobileBtn" type="button" aria-pressed="false" title="Extra stor strumyta för telefon">📱 stort strumläge</button>
+            <button class="kbtn" id="eldBtnMobile" type="button" title="Fullskärm med lägereld och stor text">🔥 lägerbål</button>
             <span class="tone-cal" id="instrumentChoice" role="group" aria-label="Gitarrtyp">
               <span>gitarr</span>
               <button class="kbtn instrument-choice-btn active" type="button" data-instrument="six" aria-pressed="true"><strong>6</strong> stål</button>
@@ -4698,6 +4707,7 @@ function setCrackle(on){
 function setEld(on){
   if (on&&mobilePerform) setMobilePerform(false);
   if (on&&performOn) setPerform(false);
+  if (on&&mobileControlsOpen) setMobileControls(false);
   eldOn=on;
   document.querySelector('.app').classList.toggle('eld',on);
   $('eldbar').classList.toggle('on',on);
@@ -4710,6 +4720,7 @@ function setEld(on){
   if (cur.idx>=0) setTimeout(()=>highlightPos(cur.idx),60);
 }
 $('eldBtn').addEventListener('click',()=>setEld(true));
+$('eldBtnMobile').addEventListener('click',()=>setEld(true));
 $('eldExit').addEventListener('click',()=>setEld(false));
 $('eldPlay').addEventListener('click',toggleMetronome);
 $('eldCrackle').addEventListener('click',()=>setCrackle(!crackleOn));
