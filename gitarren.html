@@ -775,7 +775,7 @@
 
 <div class="app">
   <aside id="aside">
-    <div class="brand"><h1>Gitarren</h1><p>hela sångboken · spelbar · v2026-07-28d</p></div>
+    <div class="brand"><h1>Gitarren</h1><p>hela sångboken · spelbar · v2026-07-28e</p></div>
     <div class="search"><input id="q" type="search" placeholder="Sök låt, artist, tagg …" aria-label="Sök"></div>
     <div class="cats" id="cats"></div>
     <div class="count"><span id="count"></span><button class="cat" id="vlOpen">🎤 röstlogg</button></div>
@@ -967,6 +967,8 @@
 
 <script>
 if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) navigator.serviceWorker.register("sw.js").catch(() => {});
+/* Skydda cache + IndexedDB från lagringsstädning — offlinestart på iOS. */
+if (navigator.storage?.persist) navigator.storage.persist().catch(() => {});
 
 
 </script>

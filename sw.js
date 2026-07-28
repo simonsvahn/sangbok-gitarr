@@ -2,8 +2,13 @@
    Strategi: cache-först med bakgrundsuppdatering (stale-while-revalidate).
    Sidan visas alltid direkt (även utan nät); med nät hämtas senaste bygget
    i bakgrunden och visas vid nästa appstart. */
-const CACHE = "sangbok-gitarr-v1";
-const FILER = ["./", "./index.html", "./gitarren.html", "./manifest.json", "./apple-touch-icon.png"];
+const CACHE = "sangbok-gitarr-v2";
+const FILER = [
+  "./", "./index.html", "./gitarren.html",
+  "./manifest.json", "./gitarren-manifest.json",
+  "./apple-touch-icon.png", "./icon-512.png",
+  "./gitarren-icon-180.png", "./gitarren-icon-512.png"
+];
 
 self.addEventListener("install", e => {
   e.waitUntil(

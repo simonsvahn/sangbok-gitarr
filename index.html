@@ -282,6 +282,9 @@ KAPITEL.forEach(k => { const t=new Set(k.tags); k.set=t;
 /* ---------- offline (service worker) ---------- */
 if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost"))
   navigator.serviceWorker.register("sw.js").catch(() => {});
+/* Be webbläsaren skydda cache + IndexedDB från lagringsstädning (viktigt för
+   offlinestart på iOS); tyst nej där stödet saknas. */
+if (navigator.storage?.persist) navigator.storage.persist().catch(() => {});
 
 /* ---------- state ---------- */
 const app = document.getElementById("app");
