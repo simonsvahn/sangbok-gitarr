@@ -427,6 +427,44 @@
   /* Lägerbålsknappen i mobilpanelen — låthuvudets knapp döljs på smala
      skärmar, så mobilen behöver en egen väg in i eldläget. */
   #eldBtnMobile{display:none}
+  #setlistBtnMobile{display:none}
+
+  /* ============ Fas 1: kvällslista (3.3) + irritationslogg (3.1) ============ */
+  .list-head{
+    padding:8px 14px 2px;font-style:italic;font-size:.72rem;
+    color:var(--text-dim);letter-spacing:.08em;
+  }
+  .setlist-row{display:flex;align-items:stretch;gap:4px}
+  .setlist-row .song-item{flex:1;min-width:0}
+  .setlist-ctl{
+    flex:0 0 34px;border:1px solid var(--panel-line);border-radius:8px;
+    background:transparent;color:var(--text-dim);cursor:pointer;font-size:.9rem;
+  }
+  #flagBtn{
+    position:fixed;z-index:60;
+    right:max(8px, env(safe-area-inset-right, 0px));bottom:34%;
+    width:44px;height:44px;border-radius:50%;
+    border:1px solid var(--panel-line);background:rgba(10,14,24,.55);
+    color:var(--text-dim);font-size:1.05rem;cursor:pointer;opacity:.55;
+  }
+  #flagBtn.ping{animation:flagPing .5s ease;opacity:1}
+  @keyframes flagPing{0%{transform:scale(1)}35%{transform:scale(1.3)}100%{transform:scale(1)}}
+  #flagCount{
+    position:absolute;top:-7px;right:-7px;min-width:17px;height:17px;
+    border-radius:999px;background:var(--ember);color:#fff;
+    font-size:.62rem;line-height:17px;padding:0 3px;
+  }
+  #nextUp{
+    display:none;position:fixed;z-index:55;
+    left:max(10px, env(safe-area-inset-left, 0px));
+    bottom:calc(96px + env(safe-area-inset-bottom, 0px));
+    max-width:70vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-family:var(--serif);font-style:italic;font-size:.82rem;
+    color:var(--text-dim);background:rgba(10,14,24,.7);
+    border:1px solid var(--panel-line);border-radius:999px;
+    padding:8px 14px;cursor:pointer;
+  }
+  #nextUp b{color:#ffe3b8;font-weight:600}
 
   /* ================= tangentbordets scenläge ================= */
   .app.perform{grid-template-columns:1fr}
@@ -467,8 +505,9 @@
       flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
       font-size:clamp(1.05rem,5vw,1.35rem);
     }
-    .songhead .artist,.songhead .chips,#performBtn,#eldBtn{display:none}
-    #eldBtnMobile{display:inline-block}
+    .songhead .artist,.songhead .chips,#performBtn,#eldBtn,#setlistBtn{display:none}
+    #eldBtnMobile,#setlistBtnMobile{display:inline-block}
+    #nextUp:not([hidden]){display:block}
     .app.mobile-controls-open .songhead{flex-wrap:wrap}
     .app.mobile-controls-open .songhead .chips{
       display:flex;order:5;flex:1 0 100%;margin:0;
@@ -773,9 +812,18 @@
   <button class="kbtn" id="eldExit" title="Tillbaka (Esc)">✕</button>
 </div>
 
+<!-- Irritationsloggen (3.1): ett tryck, alltid nåbar, även i eldläget. -->
+<button id="flagBtn" type="button" hidden
+  title="Logga en irritation — ett tryck, inget avbrott"
+  aria-label="Logga en irritation">⚑<span id="flagCount" hidden></span></button>
+<!-- Nästa ur kvällslistan (3.3). -->
+<button id="nextUp" type="button" hidden aria-label="Öppna nästa låt i kvällslistan">
+  nästa: <b id="nextUpTitle"></b> →
+</button>
+
 <div class="app">
   <aside id="aside">
-    <div class="brand"><h1>Gitarren</h1><p>hela sångboken · spelbar · v2026-07-28e</p></div>
+    <div class="brand"><h1>Gitarren</h1><p>hela sångboken · spelbar · v2026-07-28f</p></div>
     <div class="search"><input id="q" type="search" placeholder="Sök låt, artist, tagg …" aria-label="Sök"></div>
     <div class="cats" id="cats"></div>
     <div class="count"><span id="count"></span><button class="cat" id="vlOpen">🎤 röstlogg</button></div>
@@ -790,6 +838,7 @@
       <div class="chips" id="sChips"></div>
       <button class="kbtn" id="performBtn" type="button" aria-keyshortcuts="P" title="Avskalat scenläge för tangentbord (P)">⌨ scenläge</button>
         <button class="kbtn" id="eldBtn" title="Fullskärm med lägereld och stor text">🔥 lägerbål</button>
+      <button class="kbtn" id="setlistBtn" type="button" title="Lägg till eller ta bort låten ur kvällslistan">♪ kvällslista</button>
     </div>
     <div class="capo-advice" id="capoAdviceBar" hidden>
       <span class="capo-advice-text" id="capoAdviceText"></span>
@@ -872,6 +921,9 @@
             <button class="kbtn" id="dampBtn" type="button">dämpa strängarna</button>
             <button class="kbtn" id="mobileBtn" type="button" aria-pressed="false" title="Extra stor strumyta för telefon">📱 stort strumläge</button>
             <button class="kbtn" id="eldBtnMobile" type="button" title="Fullskärm med lägereld och stor text">🔥 lägerbål</button>
+            <button class="kbtn" id="setlistBtnMobile" type="button" title="Lägg till eller ta bort låten ur kvällslistan">♪ kvällslista</button>
+            <button class="kbtn" id="irrExport" type="button" title="Ladda ner irritationsloggen som fil">⚑ logg: <span id="irrCount">0</span></button>
+            <button class="kbtn" id="irrClear" type="button" title="Töm irritationsloggen">rensa logg</button>
             <span class="tone-cal" id="instrumentChoice" role="group" aria-label="Gitarrtyp">
               <span>gitarr</span>
               <button class="kbtn instrument-choice-btn active" type="button" data-instrument="six" aria-pressed="true"><strong>6</strong> stål</button>
@@ -3939,7 +3991,7 @@ const el={q:$('q'),cats:$('cats'),list:$('list'),count:$('count'),
   sTitle:$('sTitle'),sArtist:$('sArtist'),sChips:$('sChips'),body:$('body'),
   palette:$('palette'),aside:$('aside'),menuBtn:$('menuBtn')};
 
-let store={fav:[],last:null,tr:{},capo:{},voice:{},metro:{},toneProfile:'A',instrumentType:'six',textScale:100};
+let store={fav:[],last:null,tr:{},capo:{},voice:{},metro:{},toneProfile:'A',instrumentType:'six',textScale:100,recent:[],setlist:[],irrLog:[]};
 try{ const raw=localStorage.getItem('gitarren-v1'); if (raw) store=Object.assign(store,JSON.parse(raw)); }catch(e){}
 if (!store.metro || typeof store.metro!=='object') store.metro={};
 const saveStore=()=>{ try{ localStorage.setItem('gitarren-v1',JSON.stringify(store)); }catch(e){} };
@@ -3950,7 +4002,7 @@ instrumentType=INSTRUMENTS[store.instrumentType]?store.instrumentType:'six';
 store.instrumentType=instrumentType;
 syncInstrumentUI();
 
-const CATS=['Alla','Favoriter',...[...new Set(SONGS.map(s=>s.cat))].sort((a,b)=>a.localeCompare(b,'sv'))];
+const CATS=['Alla','Favoriter','Kvällslista',...[...new Set(SONGS.map(s=>s.cat))].sort((a,b)=>a.localeCompare(b,'sv'))];
 let curCat='Alla', curQ='';
 const cur={song:null,t:0,seq:[],idx:-1};
 
@@ -3970,28 +4022,64 @@ function norm(s){ return s.toLowerCase(); }
 function filtered(){
   let arr=SONGS;
   if (curCat==='Favoriter') arr=arr.filter(s=>store.fav.includes(s.id));
+  else if (curCat==='Kvällslista')
+    arr=store.setlist.map(id=>SONGS.find(s=>s.id===id)).filter(Boolean);
   else if (curCat!=='Alla') arr=arr.filter(s=>s.cat===curCat);
   if (curQ){
     const q=norm(curQ);
     arr=arr.filter(s=>norm(s.t).includes(q)||norm(s.a).includes(q)||
       norm(s.g).includes(q)||(s.alt&&norm(s.alt).includes(q)));
+    /* Snabbast till det man faktiskt spelar: senaste, sedan favoriter (3.4). */
+    const rank=s=>{const r=store.recent.indexOf(s.id);
+      return r>=0?r:(store.fav.includes(s.id)?100:1000);};
+    if (curCat!=='Kvällslista') arr=[...arr].sort((a,b)=>rank(a)-rank(b));
   }
   return arr;
+}
+function songRow(s){
+  const b=document.createElement('button');
+  b.className='song-item'+(cur.song&&cur.song.id===s.id?' sel':'');
+  b.innerHTML=`<span class="t">${esc(s.t)}</span>`+
+    (store.voice[s.id]?'<span class="fav">🎤</span>':'')+
+    (store.fav.includes(s.id)?'<span class="fav">★</span>':'')+
+    `<span class="a">${esc(s.a)}</span>`;
+  b.addEventListener('click',()=>{ openSong(s); el.aside.classList.remove('open'); });
+  return b;
 }
 function renderList(){
   const arr=filtered();
   el.count.textContent=`${arr.length} låt${arr.length===1?'':'ar'}`;
   el.list.innerHTML='';
   const frag=document.createDocumentFragment();
+  /* Senaste-blocket överst i Alla-vyn (3.4) — orört alfabet under. */
+  if (curCat==='Alla' && !curQ && store.recent.length){
+    const recent=store.recent.map(id=>SONGS.find(s=>s.id===id)).filter(Boolean).slice(0,5);
+    if (recent.length){
+      const h=document.createElement('div'); h.className='list-head'; h.textContent='senaste';
+      frag.appendChild(h);
+      recent.forEach(s=>frag.appendChild(songRow(s)));
+      const h2=document.createElement('div'); h2.className='list-head'; h2.textContent='alla';
+      frag.appendChild(h2);
+    }
+  }
   for (const s of arr){
-    const b=document.createElement('button');
-    b.className='song-item'+(cur.song&&cur.song.id===s.id?' sel':'');
-    b.innerHTML=`<span class="t">${esc(s.t)}</span>`+
-      (store.voice[s.id]?'<span class="fav">🎤</span>':'')+
-      (store.fav.includes(s.id)?'<span class="fav">★</span>':'')+
-      `<span class="a">${esc(s.a)}</span>`;
-    b.addEventListener('click',()=>{ openSong(s); el.aside.classList.remove('open'); });
-    frag.appendChild(b);
+    if (curCat==='Kvällslista' && !curQ){
+      /* Sorterbar rad: låtknapp + ↑ ↓ ✕ (3.3). */
+      const row=document.createElement('div'); row.className='setlist-row';
+      row.appendChild(songRow(s));
+      const i=store.setlist.indexOf(s.id);
+      const mk=(txt,label,fn)=>{const c=document.createElement('button');
+        c.className='setlist-ctl'; c.type='button'; c.textContent=txt;
+        c.setAttribute('aria-label',label);
+        c.addEventListener('click',ev=>{ev.stopPropagation(); fn(); saveStore(); renderList(); updateNextUp();});
+        return c;};
+      row.appendChild(mk('↑','Flytta upp',()=>{ if(i>0){[store.setlist[i-1],store.setlist[i]]=[store.setlist[i],store.setlist[i-1]];} }));
+      row.appendChild(mk('↓','Flytta ner',()=>{ if(i<store.setlist.length-1){[store.setlist[i+1],store.setlist[i]]=[store.setlist[i],store.setlist[i+1]];} }));
+      row.appendChild(mk('✕','Ta bort ur kvällslistan',()=>{ store.setlist.splice(i,1); syncSetlistBtns(); }));
+      frag.appendChild(row);
+    } else {
+      frag.appendChild(songRow(s));
+    }
   }
   el.list.appendChild(frag);
 }
@@ -4026,9 +4114,13 @@ function openSong(s){
   currentSym=null;
   resetRightHand();
   loadMetroSettings(s);
-  store.last=s.id; saveStore();
+  store.last=s.id;
+  store.recent=[s.id,...(store.recent||[]).filter(x=>x!==s.id)].slice(0,8);
+  saveStore();
   renderSong();
   renderList();
+  syncSetlistBtns();
+  updateNextUp();
   el.body.scrollTop=0;
   if (eldOn) $('eldTitle').innerHTML=`<b>${esc(s.t)}</b> · ${esc(s.a)}`;
 
@@ -4719,6 +4811,7 @@ function setEld(on){
   setCrackle(on);
   document.getElementById('eldNext').classList.toggle('on',on);
   document.getElementById('eldStrum').classList.toggle('on',on);
+  updateNextUp();
   if (cur.idx>=0) setTimeout(()=>highlightPos(cur.idx),60);
 }
 $('eldBtn').addEventListener('click',()=>setEld(true));
@@ -4726,6 +4819,79 @@ $('eldBtnMobile').addEventListener('click',()=>setEld(true));
 $('eldExit').addEventListener('click',()=>setEld(false));
 $('eldPlay').addEventListener('click',toggleMetronome);
 $('eldCrackle').addEventListener('click',()=>setCrackle(!crackleOn));
+
+/* ---------------- kvällslista (3.3) ---------------- */
+function inSetlist(){ return !!(cur.song&&store.setlist.includes(cur.song.id)); }
+function syncSetlistBtns(){
+  const on=inSetlist();
+  for (const id of ['setlistBtn','setlistBtnMobile']){
+    const b=document.getElementById(id);
+    b.classList.toggle('active',on);
+    b.textContent=on?'♪ i kvällslistan':'♪ kvällslista';
+  }
+  $('flagBtn').hidden=!cur.song;
+}
+function toggleSetlist(){
+  if (!cur.song) return;
+  const i=store.setlist.indexOf(cur.song.id);
+  if (i>=0) store.setlist.splice(i,1); else store.setlist.push(cur.song.id);
+  saveStore(); syncSetlistBtns(); updateNextUp();
+  if (curCat==='Kvällslista') renderList();
+}
+function nextInSetlist(){
+  if (!store.setlist.length) return null;
+  const i=cur.song?store.setlist.indexOf(cur.song.id):-1;
+  const id=i>=0?store.setlist[i+1]:store.setlist[0];
+  if (!id||(cur.song&&id===cur.song.id)) return null;
+  return SONGS.find(s=>s.id===id)||null;
+}
+function updateNextUp(){
+  const s=nextInSetlist();
+  $('nextUp').hidden=!s||eldOn;
+  if (s) $('nextUpTitle').textContent=s.t;
+}
+$('setlistBtn').addEventListener('click',toggleSetlist);
+$('setlistBtnMobile').addEventListener('click',toggleSetlist);
+$('nextUp').addEventListener('click',()=>{ const s=nextInSetlist(); if (s) openSong(s); });
+
+/* ---------------- irritationslogg (3.1) ---------------- */
+function syncIrrUI(){
+  $('irrCount').textContent=String(store.irrLog.length);
+  $('irrClear').hidden=!store.irrLog.length;
+  $('flagCount').hidden=!store.irrLog.length;
+  $('flagCount').textContent=String(store.irrLog.length);
+}
+function logIrritation(){
+  store.irrLog.push({
+    ts:new Date().toISOString(),
+    song:cur.song?cur.song.id:null, chord:currentSym||null, idx:cur.idx,
+    lage:{eld:eldOn,scen:performOn,mobilscen:mobilePerform,
+      komp:autoComp.running,panel:mobileControlsOpen},
+    capo:cur.song?(store.capo[cur.song.id]||0):0, tr:cur.t
+  });
+  if (store.irrLog.length>500) store.irrLog=store.irrLog.slice(-500);
+  saveStore(); syncIrrUI();
+  const b=$('flagBtn');
+  b.classList.remove('ping'); void b.offsetWidth; b.classList.add('ping');
+}
+$('flagBtn').addEventListener('click',logIrritation);
+$('irrExport').addEventListener('click',()=>{
+  const blob=new Blob(
+    [JSON.stringify({exporterad:new Date().toISOString(),poster:store.irrLog},null,2)],
+    {type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`irritationslogg-${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+});
+$('irrClear').addEventListener('click',()=>{
+  if (confirm(`Töm irritationsloggen (${store.irrLog.length} poster)?`)){
+    store.irrLog=[]; saveStore(); syncIrrUI();
+  }
+});
+syncIrrUI();
+syncSetlistBtns();
+updateNextUp();
 
 /* ---------------- start ---------------- */
 function applyTextScale(){
